@@ -1,0 +1,224 @@
+/* AlloyTimer By Kinvix 2012 */
+
+::-webkit-scrollbar-track-piece {
+	background:#f5f5f5;
+	border-left:1px solid #d2d2d2;
+}
+::-webkit-scrollbar {
+	width:13px;
+	height:13px;
+}
+::-webkit-scrollbar-thumb {
+	background:#c2c2c2;
+	background-clip:padding-box;
+	border:1px solid #979797;
+	min-height:28px;
+
+
+}
+::-webkit-scrollbar-thumb:hover {
+	border:1px solid #636363;
+	background:#929292;
+}
+
+
+
+
+body{
+
+	font-family:Michroma,'Segoe UI Light','Segoe UI','Segoe UI WP','Microsoft Jhenghei',Tahoma, Arial, "MS Trebuchet", 'Î¢ÈíÑÅºÚ',sans-serif;
+	font-size:16px;
+	line-height:1.8;
+	cursor:default;
+	color:#666;
+	
+	
+}
+input {
+
+	margin:10px auto;
+}
+button{
+	display: block;
+	margin:10px auto;
+}
+label{
+	cursor:pointer;
+}
+
+ul{
+	list-style:none;
+}
+
+.btn{
+	margin:10px auto 10px;
+}
+
+#main{
+	margin-top:40px;
+	-webkit-animation: alloyAnimation 1.2s cubic-bezier(.4,1.8,.5,.8) 0 1;
+	-moz-animation: alloyAnimation 1.2s cubic-bezier(.4,1.8,.5,.8) 0 1;
+	-ms-animation: alloyAnimation 1.2s cubic-bezier(.4,1.8,.5,.8) 0 1;
+	-o-animation: alloyAnimation 1.2s cubic-bezier(.4,1.8,.5,.8) 0 1;
+	animation: alloyAnimation 1.2s cubic-bezier(.4,1.8,.5,.8) 0 1;
+}
+
+@-webkit-keyframes alloyAnimation {
+	from {
+		margin-top:-200px;
+	}
+	to {
+		margin-top:40px;
+	}
+}
+@-moz-keyframes alloyAnimation {
+	from {
+		margin-top:-200px;
+	}
+	to {
+		margin-top:40px;
+	}
+}
+@keyframes alloyAnimation {
+	from {
+		margin-top:-200px;
+	}
+	to {
+		margin-top:40px;
+	}
+}
+
+#title{
+	margin:0 auto 30px auto;
+
+	font-size: 50px;
+	font-weight: normal;
+}
+#subTitle{
+	font-size: 20px;
+	line-height: 20px;
+	font-weight: normal;
+}
+.remainTime{
+	text-align:center;
+	font-size:160px;
+	line-height:1.2;
+	color: #999;
+}
+.remainTimeActive{
+	color:#3C8CFF;
+}
+#progressBarBox {
+	margin:auto;
+	max-width:500px;
+	height:15px;
+	overflow: hidden;
+	box-shadow: inset 0px 0px 3px;
+}
+#progressBar{
+	width:100%;
+}
+
+
+#control{
+	margin:10px auto;
+	max-width:600px;
+	text-align:center;
+}
+
+#more{
+	margin:10px auto;
+	width:600px;
+}
+
+#currentTask{
+	font-size: 16px;
+	margin:10px;
+}
+
+#taskName{
+	display: block;
+	margin: auto;
+	/*height: 70px;*/
+	max-width: 500px;
+	padding: 20px 15px;
+	font-weight: bold;
+	text-align: center;
+}
+
+
+#startWorkButton{
+/*	display:block;*/
+	height: 50px;
+	width: 250px;
+	/*width: 80%;*/
+}
+#startRestButton{
+/*	display:block;*/
+	height: 50px;
+	width: 100px;
+}
+
+#stopButton{
+	/*display:block;*/
+	height: 50px;
+	width: 60px;
+}
+
+#introBoard{
+	display:none;
+	margin-left:25px;
+}
+#introBoard h4{
+	font-weight:normal;
+}
+#introList{
+	
+	list-style-position:inside;
+}
+#introList li{
+	
+	margin:5px;
+}
+#settingBoard{
+	display:none;
+	
+}
+#loopCheckboxText{
+	line-height: 22px;
+	float: left;
+	margin: 0px 10px 0px 0;
+}
+#isLoopCheckbox{
+	float:left;
+}
+#workTimeText{
+	float: left;
+	margin:10px 0 0 0;
+	line-height: 20px;
+}
+#workTime{
+	width:80px;
+	margin:5px 0 5px 10px;
+	cursor:n-resize;
+}
+#restTimeText{
+	float: left;
+	margin:10px 0 0 0;
+	line-height: 20px;
+}
+#restTime{
+	width:80px;
+	margin:5px 0 5px 10px;
+	cursor:n-resize;
+}
+#taskListBoard{
+	display:none;
+	
+}
+.copyright{
+	margin: 50px auto;
+	text-align:center;
+	font-family: Tahoma, Arial, "MS Trebuchet", 'Î¢ÈíÑÅºÚ',sans-serif;
+	font-size:12px;
+}

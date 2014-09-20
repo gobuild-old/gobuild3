@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+    <link rel="stylesheet" type="text/css" href="/static/css/timer-main.css" />
+{% endblock %}
+{% block title %}Timer Record{% endblock %}
+{% block body %}
+<div>
+    <table class="table table-striped">
+    {% for r in records %}
+        <tr>
+            <td>R{{r.id}}</td>
+            <td>{{r.created}}</td>
+            <td>{{r.mission}}</td>
+            <td>{{r.status}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

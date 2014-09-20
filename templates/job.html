@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<link href="/static/css/lightbox.css" rel="stylesheet" />
+<script src="/static/js/lightbox.min.js"></script>
+{% endblock %}
+{% block title %}Cluster{%endblock%}
+{% block body %}
+<h3><a href="http://jenkins.mt.nie.netease.com">Jenkins</a>状态管理</h3>
+<form role="form" action="/job/create" method="post" enctype="multipart/form-data">
+	<h2>手游测试(Still developing...)</h2>
+	<div class="form-group">
+		<label>任务名</label>
+		<input placeholder="不能为空, 只能是英文" type="text" name="job-name" class="form-control">
+	</div>
+	<div class="form-group">
+		<label>代码地址（目前只支持git)</label>
+		<input placeholder="代码地址 http://...git" type="text" name="code-uri" class="form-control">
+	</div>
+	<div class="form-group">
+		<label>用户名</label>
+		<input placeholder="用户名，可为空" type="text" name="username" class="form-control">
+	</div>
+	<div class="form-group">
+		<label>密码</label>
+		<input placeholder="密码，可为空" type="text" name="password" class="form-control">
+	</div>
+	<h4>选择手机</h4>
+	<table class="table">
+		<tr>
+			<th></th><th>Brand</th><th>Model</th><th>PhoneNo</th><th>Memory</th><th>Size</th><th>JobStatus</th><th>Screenshot</th>
+		</tr>
+		{% for p in phones %}
+		<tr {%if not p.connected%}class='danger'{%endif%}>
+			<td><input name="phoneid" value="{{p.id}}" type="checkbox"/></td><td>{{p.brand}}</td><td>{{p.model}}</td><td>{{p.number}}</td><td>{{p.memory_size}}MB</td><td>{{p.width}}x{{p.height}}</td>
+			<td><a href='{{jenkins_url}}/job/{{p.job_name}}/'><img src='{{jenkins_url}}/job/{{p.job_name}}/badge/icon'></a></td>
+			<td><a href="/static/images/screenshot/{{p.screen_file}}.png" data-title="{{p.brand}}-{{p.number}}"data-lightbox="roadtrip"><img height="30px" src="/static/images/screenshot/{{p.screen_file}}-small.png"/></a></td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<input class="btn btn-default" type="submit" value="创建测试任务">
+</form>
+<div>
+	<ul>
+	{% for link in links %}
+		<li><a href="{{link}}">{{link}}</a></li>
+	{% endfor %}
+	</ul>
+</div>
+
+{% endblock %}

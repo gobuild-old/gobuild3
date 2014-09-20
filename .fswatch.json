@@ -1,0 +1,18 @@
+{
+    "paths": [
+        "."
+    ],
+    "depth": 2,
+    "exclude": [],
+    "include": [
+        "\\.(go|py|php|java|cpp|h|rb)$"
+    ],
+    "command": [
+        "sh", "./killweb.sh"
+    ],
+    "env": {
+        "POWERD_BY": "github.com/codeskyblue/fswatch"
+    },
+	"kill-signal": "KILL",
+	"restart-interval": 0
+}

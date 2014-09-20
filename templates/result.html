@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block head_extra %}
+<link href="/static/css/lightbox.css" rel="stylesheet" />
+<script src="/static/js/lightbox.min.js"></script>
+{% endblock %}
+{% block title %}Cluster{%endblock%}
+
+{% block body %}
+<h2>测试状态查看</h2>
+<h1>编号: {{test_id}}</h1>
+<pre>
+触发时间: {{trigger_time}}
+结束时间: {{finish_time}}
+耗时: {{spend_time}}
+</pre>
+
+<div>
+	<lable>状态:</label> <img src="{{job_status_badge}}" alt="{{job_status}}" />
+	<a href="{{job_log_url}}">日志查看</a>
+	<a href="{{job_report_url}}">查看报告</a>
+
+	<div>
+	截图
+		<br/>
+		<a href="/static/images/screenshot/demo.png" data-title="最后的截图" data-lightbox="roadtrip">
+		<img height="300px" src="/static/images/screenshot/demo.png"/>
+		</a>
+	</div>
+</div>
+{% endblock %}
