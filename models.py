@@ -5,6 +5,7 @@ import time
 from pony.orm import *
 from datetime import datetime, timedelta, date
 import json
+import gcfg
 
 #sql_debug(True)
 db = Database()
@@ -88,7 +89,11 @@ class BoxPort(db.Entity):
     box = Optional(Box)
 
 #db.bind('sqlite', 'c:/test_db.sqlite', create_db=True)
-db.bind('mysql', host='mt.nie.netease.com', user='air', passwd='air', db='air')
+db.bind(gcfg.db.dbtype, 
+        host=gcfg.db.host, 
+        user=gcfg.db.username, 
+        passwd=gcfg.db.password, 
+        db=gcfg.db.dbname)
 db.generate_mapping(create_tables=True)
 
 @db_session

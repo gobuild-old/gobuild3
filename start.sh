@@ -3,5 +3,10 @@
 # start server
 
 cd $(dirname $0)
-source venv/bin/activate
+
+if test -d venv
+then
+	source venv/bin/activate
+fi
+
 exec python web.py
