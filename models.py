@@ -36,12 +36,14 @@ class Timer(db.Entity):
     created = Optional(date)
     count = Optional(int, default=1)
 
-#db.bind('sqlite', 'c:/test_db.sqlite', create_db=True)
+db.bind('sqlite', './test_db.sqlite', create_db=True)
+'''
 db.bind(gcfg.db.dbtype, 
         host=gcfg.db.host, 
         user=gcfg.db.username, 
         passwd=gcfg.db.password, 
         db=gcfg.db.dbname)
+        '''
 db.generate_mapping(create_tables=True)
 
 @db_session
