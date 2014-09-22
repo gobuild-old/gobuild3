@@ -43,7 +43,7 @@ def home(test_id):
     job_name = 'MT-samsung-GT-I9502-4d005f1f9df03107'
     job_id = 9
     job_status = jenkins_job_status(job_name, job_id)
-    job_log_url = gcfg.cf.get('jenkins','domain')+'/job/%s/%d/console' %(job_name, job_id)
+    job_log_url = gcfgjenkins.host+'/job/%s/%d/console' %(job_name, job_id)
     job_report_url = 'http://jenkins.mt.nie.netease.com/job/%s/%d/HTML_Report/' %(job_name, job_id)
     return render_template('result.html', **{
         'test_id': test_id,

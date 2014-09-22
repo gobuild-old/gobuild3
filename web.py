@@ -14,13 +14,11 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # max 16M
 #app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def register_routers():
-    from routers import doc, job, timer, home, link, result, box
-    app.register_blueprint(doc.bp, url_prefix='/doc')
-    app.register_blueprint(job.bp, url_prefix='/job')
-    app.register_blueprint(link.bp, url_prefix='/link')
-    app.register_blueprint(timer.bp, url_prefix='/timer')
-    app.register_blueprint(result.bp, url_prefix='/result')
-    app.register_blueprint(box.bp, url_prefix='/box')
+    from routers import home#, link, result
+    #app.register_blueprint(doc.bp, url_prefix='/doc')
+    #app.register_blueprint(link.bp, url_prefix='/link')
+    #app.register_blueprint(timer.bp, url_prefix='/timer')
+    #app.register_blueprint(result.bp, url_prefix='/result')
     app.register_blueprint(home.bp, url_prefix='')
 
 

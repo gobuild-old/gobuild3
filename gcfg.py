@@ -7,7 +7,7 @@ from types import ModuleType
 cf = ConfigParser()
 assert cf.read('config.ini')
 
-class Section(object):
+class GcfgSection(object):
     def __init__(self, parser, section):
         self._section = section
         self._parser = parser
@@ -17,13 +17,13 @@ class Section(object):
 
 class SelfWrapper(ModuleType):
     def __init__(self, self_module, baked_args={}):
-        for attr in ["__buildins__", "__doc__", "__name__", "__package__"]:
+        for attr in ["__file__", "__hash__", "__buildins__", "__doc__", "__name__", "__package__"]:
             setattr(self, attr, getattr(self_module, attr, None))
 
         self.self_module = self_module
 
     def __getattr__(self, name):
-        return Section(cf, name)
+        return GcfgSection(cf, name)
 
 self = sys.modules[__name__]
 sys.modules[__name__] = SelfWrapper(self)
