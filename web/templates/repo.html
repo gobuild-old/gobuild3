@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+{% block title %}Repo{%endblock%}
+
+{% block body %}
+<div class="row">
+	<p class="pull-right">Updated 2 hours ago</p>
+	<a href="#"><strong>github.com/codeskyblue/fswatch</strong></a>
+	<br>
+	<p>this is a sample repo</p>
+
+	<div>
+		<span class="glyphicon glyphicon-star"></span> 2800
+		<span class="glyphicon glyphicon-cloud-download"></span> 20
+	</div>
+</div>
+
+
+<div class="row" style="border: 1px solid gray">
+	<div class="col-md-4" style="padding: 10px 10px">
+		<h4>Tags</h4>
+		<div class="list-group">
+			<a href="#" class="list-group-item">
+				latest
+				<span class="badge">
+					<span class="glyphicon glyphicon-cloud-download"></span> 20
+				</span>
+			</a>
+			<a href="#" class="list-group-item">
+				v1.2.0
+				<span class="badge">
+					<span class="glyphicon glyphicon-cloud-download"></span> 50
+				</span>
+			</a>
+		</div>
+	</div>
+
+	<div class="col-md-8" style="padding: 10px 50px; border-left: 1px solid gray">
+		<div class="row">
+			<h4>Properies</h4>
+			<p><span class="glyphicon glyphicon-time"></span> 2013-05-01 04:54:50 - [used: 20s]</p>
+			<p>go 1.2.3<br>
+			gopm 0.8.1rc1</p>
+			<h5>Download</h5>
+			<div>
+				<label class="radio-inline">
+				  <input type="radio" name="goos" id="inlineRadio1" value="option1" checked> windows
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="goos" id="inlineRadio2" value="option2"> linux
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="goos" id="inlineRadio3" value="option3"> macos
+				</label>
+			</div>
+			<div>
+				<label class="radio-inline">
+				  <input type="radio" name="arch" id="inlineRadio1" value="option1" checked> amd64
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="arch" id="inlineRadio2" value="option2"> 386
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="arch" id="inlineRadio3" value="option3"> arm
+				</label>
+			</div>
+			<div>
+				<button class="btn btn-success btn-sm">
+					<span class="glyphicon glyphicon-save"></span> Download
+				</button>
+			</div>
+			<div class="well">
+				<u>windows amd64</u><br>
+			size: 5M<br>
+			sha: 345678987654567898765<br>
+			md5: 456789876543567898765
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--
+<div>
+	<table class="table">
+		<tr>
+			<td>windows</td>
+			<td>amd64</td>
+			<td>5M</td>
+			<td><a href="#">Download<b>[42]</b></a></td>
+			<td><a href="#">sha</a> | <a href="#">md5</a></td>
+			<td><a href="#">Details</a></td>
+		</tr>
+		<tr>
+			<td>linux</td>
+			<td>amd64</td>
+			<td>5M</td>
+			<td><a href="#">Download</a></td>
+			<td><a href="#">sha</a> | <a href="#">md5</a></td>
+		</tr>
+	</table>
+</div>
+-->
+
+<div class="panel panel-default">
+  <div class="panel-heading">README.md</div>
+  <div class="panel-body">
+    Panel content
+	hello world
+  </div>
+</div>
+<!--
+<div class="container">
+	<div class="col-md-6">
+		<table class="table">
+			<tr>
+				<th>Update Time:</th>
+				<td>2014/09/20</td>
+			</tr>
+			<tr>
+				<th>Time Used:</th>
+				<td>20s</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<table class="table">
+			<tr>
+				<th>Download Count:</th>
+				<td>30</td>
+			</tr>
+			<tr>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+</div>
+-->
+
+ <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'gobuild'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+
+{% endblock %}
