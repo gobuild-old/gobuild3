@@ -4,14 +4,14 @@
 {% block body %}
 <div class="row">
 	<p class="pull-right">Updated 2 hours ago</p>
-	<a href="#"><strong>github.com/codeskyblue/fswatch</strong></a>
+	<a href="https://{{reponame}}"><strong>{{reponame}}</strong></a>
 	<!--<span class="glyphicon glyphicon-star"></span> 2800-->
 	<span class="glyphicon glyphicon-cloud-download"></span> 20
 	<br>
 	<p>this is a sample repo</p>
 	<div>
-		<a href="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3"><img src="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3?status.svg" alt="GoDoc"></a>
-		<a href="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
+		<a href="https://godoc.org/{{reponame}}"><img src="https://godoc.org/{{reponame}}?status.svg" alt="GoDoc"></a>
+		<a href="https://gowalker.org/{{reponame}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
 	</div>
 	<br>
 
@@ -42,8 +42,8 @@
 		<div class="row">
 			<h4>Properies</h4>
 			<p><span class="glyphicon glyphicon-time"></span> 2013-05-01 04:54:50 - [used: 20s]</p>
-			<p>go 1.2.3<br>
-			gopm 0.8.1rc1</p>
+			<p>go {{prop.version.go}}<br>
+			gopm {{prop.version.gopm}}</p>
 			<h5>Download</h5>
 			<div>
 				{% for goos in ('windows', 'linux', 'darwin', 'arm') %}
@@ -87,9 +87,9 @@
 
 			<div class="well">
 				<u>windows amd64</u><br>
-			size: 5M<br>
-			sha: 345678987654567898765<br>
-			md5: 456789876543567898765
+				size: {{prop.files.linux_386.zip.size}}<br>
+				sha: {{prop.files.linux_386.zip.sha}}<br>
+				md5: {{prop.files.linux_386.zip.md5}}<br>
 			</div>
 
 		</div>
