@@ -1,7 +1,6 @@
 Flask==0.10.1
 MySQL-python==1.2.3
 pony==0.5.1
-psutil==0.7.1
 py-oauth2==0.0.10
 python-jenkins==0.3.4
 requests==2.4.1
