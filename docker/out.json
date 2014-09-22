@@ -1,0 +1,25 @@
+{
+	"version": {
+		"go": "1.3.1",
+		"gopm": "0.8.1"
+	},
+	"repo": "github.com/gobuild/got",
+	"created": 45264321,
+	"time_used": 400,
+	"files": {
+		"linux-amd64": {
+			"md5": "abexq314",
+			"sha": "xx1144",
+			"log": "xxx1.log",
+			"zipname": "got-linux-amd64.tar.gz",
+			"zipsize": 10000
+		},
+		"linux-386": {
+			"md5": "abexq314",
+			"sha": "xx1144",
+			"log": "xxx2.log",
+			"zipname": "got-linux-386.tar.gz",
+			"zipsize": 10000
+		}
+	}
+}

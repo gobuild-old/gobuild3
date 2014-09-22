@@ -5,21 +5,25 @@
 <div class="row">
 	<p class="pull-right">Updated 2 hours ago</p>
 	<a href="#"><strong>github.com/codeskyblue/fswatch</strong></a>
+	<!--<span class="glyphicon glyphicon-star"></span> 2800-->
+	<span class="glyphicon glyphicon-cloud-download"></span> 20
 	<br>
 	<p>this is a sample repo</p>
+	<div>
+		<a href="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3"><img src="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3?status.svg" alt="GoDoc"></a>
+		<a href="https://godoc.org/code.google.com/p/go-sqlite/go1/sqlite3"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
+	</div>
+	<br>
 
 	<div>
-		<span class="glyphicon glyphicon-star"></span> 2800
-		<span class="glyphicon glyphicon-cloud-download"></span> 20
 	</div>
 </div>
-
 
 <div class="row" style="border: 1px solid gray">
 	<div class="col-md-4" style="padding: 10px 10px">
 		<h4>Tags</h4>
 		<div class="list-group">
-			<a href="#" class="list-group-item">
+			<a href="#" class="list-group-item active">
 				latest
 				<span class="badge">
 					<span class="glyphicon glyphicon-cloud-download"></span> 20
@@ -42,32 +46,45 @@
 			gopm 0.8.1rc1</p>
 			<h5>Download</h5>
 			<div>
+				{% for goos in ('windows', 'linux', 'darwin', 'arm') %}
 				<label class="radio-inline">
-				  <input type="radio" name="goos" id="inlineRadio1" value="option1" checked> windows
+					<input type="radio" name="goos" value="{{goos}}" checked> {{goos}}
 				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="goos" id="inlineRadio2" value="option2"> linux
-				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="goos" id="inlineRadio3" value="option3"> macos
-				</label>
+				{% endfor %}
 			</div>
 			<div>
+				{% for arch in ('amd64', '386') %}
 				<label class="radio-inline">
-				  <input type="radio" name="arch" id="inlineRadio1" value="option1" checked> amd64
+					<input type="radio" name="arch" value="{{arch}}" checked> {{arch}}
 				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="arch" id="inlineRadio2" value="option2"> 386
-				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="arch" id="inlineRadio3" value="option3"> arm
-				</label>
+				{% endfor %}
 			</div>
+			<br>
 			<div>
 				<button class="btn btn-success btn-sm">
 					<span class="glyphicon glyphicon-save"></span> Download
 				</button>
+				<p>
+			<a href="#">source</a>
+			<a href="#">build-log</a>
+			</p>
 			</div>
+			<br>
+			<div>
+				<label class="radio-inline">
+				  <input type="radio" name="download" value="wget" checked> wget
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="download" value="curl"> curl
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="download" value="got"> got
+				</label>
+			</div>
+			<div>
+				<input class="form-control" style="width:70%" type="text" value="curl xx">
+			</div>
+
 			<div class="well">
 				<u>windows amd64</u><br>
 			size: 5M<br>
