@@ -5,21 +5,17 @@
     "files": {
         "linux_386": {
             "loglink": "xxx2.log", 
-            "zip": {
-                "link": "got-linux-386.tar.gz", 
-                "md5": "abexq314", 
-                "sha": "shaaaabexq314", 
-                "size": 10000
-            }
+			"outlink": "got-linux-386.tar.gz", 
+			"md5": "abexq314", 
+			"sha": "shaaaabexq314", 
+			"size": 10000
         }, 
         "linux_amd64": {
-            "loglink": "xx112x2.log", 
-            "zip": {
-                "link": "got-linux-amd64.tar.gz", 
-                "md5": "abexq314", 
-                "sha": "shaaaabexq314", 
-                "size": 10000
-            }
+            "loglink": "xxxxxxx2.log", 
+			"outlink": "got-linux-amd64.tar.gz", 
+			"md5": "abexq314", 
+			"sha": "shaaaabexq314", 
+			"size": 10000
         }
     }, 
     "repo": "github.com/gobuild/got", 

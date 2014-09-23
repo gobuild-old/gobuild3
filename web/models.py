@@ -41,10 +41,10 @@ class File(db.Entity):
     os = Optional(unicode, default='linux')
     arch = Optional(unicode, default='amd64')
     loglink = Optional(unicode)
-    zipmd5 = Optional(unicode)
-    zipsha = Optional(unicode)
-    ziplink = Optional(unicode)
-    zipsize = Optional(int, default=0)
+    outlink = Optional(unicode)
+    size = Optional(int, default=0)
+    md5 = Optional(unicode)
+    sha = Optional(unicode)
 
 class Timer(db.Entity):
     email = Required(unicode)
@@ -85,11 +85,11 @@ if __name__ == '__main__':
         file.pkg_type = 'binary'
         file.os='windows'
         file.arch = 'amd64'
-        file.ziplink = 'http://www.baidu.com'
+        file.outlink = 'http://www.baidu.com'
         file.loglink = 'http://www.baidu.com'
-        file.zipmd5 = 'slkjfl213kj4124'
-        file.zipsha = 'sssshhhhsej23423467890'
-        file.zipsize = 1025
+        file.md5 = 'slkjfl213kj4124'
+        file.sha = 'sssshhhhsej23423467890'
+        file.size = 1025
 
         build = Build(repo=repo)
         build.tag = 'tag:v1.0.2'

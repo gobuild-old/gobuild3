@@ -94,12 +94,7 @@
 				</table>
 			</div>
 
-			<div class="well" id="well">
-				<u>windows amd64</u><br>
-				size: {{prop.files.linux_386.zip.size}}<br>
-				sha: {{prop.files.linux_386.zip.sha}}<br>
-				md5: {{prop.files.linux_386.zip.md5}}<br>
-			</div>
+			<div class="well" id="well"></div>
 			{% else %}
 			{{active_build.status}}
 			<pre>{{active_build.details}}</pre>
@@ -191,7 +186,7 @@ $(".download").click(function(e){
 			well = well.replace(new RegExp('\n','g'), '<br>');
 			$("#well").html(well);
 			if (d.status === 0){
-				saveas(d.ziplink);
+				saveas(d.outlink);
 			}
 		});
 		//a.close();

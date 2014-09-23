@@ -42,8 +42,6 @@ def home(reponame):
 
     kwargs = dict(reponame=reponame, repo=repo, naturaltime=naturaltime, builds=builds,
             active_tag=active_tag, active_build=active_build)
-    v = json.load(open('out.json'))
-    kwargs['prop'] = v
     return render_template('repo.html', **kwargs)
 
 # FIXME: not finished build page
@@ -72,12 +70,12 @@ def retrive():
     repo.down_count += 1
     build.down_count += 1
 
-    well = '{os} {arch}\n<b>ZIP</b>\nsize: {size}\nsha: {zipsha}\nmd5: {zipmd5}'.format(
+    well = '{os} {arch}\n<b>File</b>\nsize: {size}\nsha: {sha}\nmd5: {md5}'.format(
             os=goos, arch=goarch, 
-            size=humanize.naturalsize(file.zipsize),
-            zipmd5=file.zipmd5, zipsha=file.zipsha)
+            size=humanize.naturalsize(file.size),
+            md5=file.md5, sha=file.sha)
     return flask.jsonify(dict(status=0, message='success', 
-        well=well, goos=goos, goarch=goarch, ziplink=file.ziplink, loglink=file.loglink))
+        well=well, goos=goos, goarch=goarch, outlink=file.outlink, loglink=file.loglink))
 
 @bp.route('/update', methods=['POST'])
 @models.db_session
@@ -89,7 +87,6 @@ def update():
     build.status = fv('status')
     build.updated = datetime.datetime.today()
     build.details = fv('details')
-    print request.form
 
     return flask.jsonify(dict(status=0, message='success'))
 
@@ -109,10 +106,10 @@ def commit():
             file = models.File.get(build=build, os=goos, arch=arch) or \
                     models.File(build=build, os=goos, arch=arch, reponame=build.repo.name)
             file.loglink = ds.get('loglink')
-            file.ziplink = ds.get('zip').get('link')
-            file.zipsize = ds.get('zip').get('size')
-            file.zipmd5 = ds.get('zip').get('md5')
-            file.zipsha = ds.get('zip').get('sha')
+            file.outlink = ds.get('outlink')
+            file.size = ds.get('size')
+            file.md5 = ds.get('md5')
+            file.sha = ds.get('sha')
             #print osarch, ds
     return flask.jsonify(dict(status=0, message='success'))
 

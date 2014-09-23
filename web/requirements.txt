@@ -1,8 +1,9 @@
-Flask==0.10.1
-MySQL-python==1.2.3
-pony==0.5.1
-py-oauth2==0.0.10
-python-jenkins==0.3.4
-requests==2.4.1
-sh==1.09
-humanize==0.5
+Flask>=0.10.1
+MySQL-python>=1.2.3
+pony>=0.5.1
+py-oauth2>=0.0.10
+python-jenkins>=0.3.4
+requests>=2.4.1
+sh>=1.09
+humanize>=0.5
+qiniu>=6.1.8
