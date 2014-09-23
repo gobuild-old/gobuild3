@@ -2,18 +2,27 @@
 import sys
 from ConfigParser import ConfigParser
 from types import ModuleType
-#import jenkins
+
+cfdefault = ConfigParser()
+assert cfdefault.read('config.default.ini')
 
 cf = ConfigParser()
-assert cf.read('config.ini')
+cf.read('config.ini')
 
 class GcfgSection(object):
-    def __init__(self, parser, section):
+    def __init__(self, default, user, section):
         self._section = section
-        self._parser = parser
+        self._default = default
+        self._user = user
     
     def __getattr__(self, name):
-        return self._parser.get(self._section, name)
+        value = self._default.get(self._section, name)
+        try:
+            value = self._user.get(self._section, name)
+        except:
+            pass
+        return value
+
 
 class SelfWrapper(ModuleType):
     def __init__(self, self_module, baked_args={}):
@@ -23,11 +32,8 @@ class SelfWrapper(ModuleType):
         self.self_module = self_module
 
     def __getattr__(self, name):
-        return GcfgSection(cf, name)
+        return GcfgSection(cfdefault, cf, name)
 
 self = sys.modules[__name__]
 sys.modules[__name__] = SelfWrapper(self)
 
-
-#JENKINS = jenkins.Jenkins(cf.get('jenkins', 'domain'), 
-#        cf.get('jenkins', 'username'), cf.get('jenkins', 'password'))
