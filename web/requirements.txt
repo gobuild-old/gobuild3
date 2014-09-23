@@ -5,3 +5,4 @@ py-oauth2==0.0.10
 python-jenkins==0.3.4
 requests==2.4.1
 sh==1.09
+humanize==0.5

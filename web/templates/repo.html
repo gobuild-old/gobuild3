@@ -3,12 +3,12 @@
 
 {% block body %}
 <div class="row">
-	<p class="pull-right">Updated 2 hours ago</p>
+	<p class="pull-right">Updated {{naturaltime}}</p>
 	<a href="https://{{reponame}}"><strong>{{reponame}}</strong></a>
 	<!--<span class="glyphicon glyphicon-star"></span> 2800-->
-	<span class="glyphicon glyphicon-cloud-download"></span> 20
+	<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
 	<br>
-	<p>this is a sample repo</p>
+	<p>{{repo.description}}</p>
 	<div>
 		<a href="https://godoc.org/{{reponame}}"><img src="https://godoc.org/{{reponame}}?status.svg" alt="GoDoc"></a>
 		<a href="https://gowalker.org/{{reponame}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
@@ -23,18 +23,15 @@
 	<div class="col-md-4" style="padding: 10px 10px">
 		<h4>Tags</h4>
 		<div class="list-group">
-			<a href="#" class="list-group-item active">
-				latest
+			{% for build in builds %}
+			<a href="/repo/{{reponame}}?tag={{build.tag}}" 
+				class="list-group-item {%if build.tag==default_tag%}active{%endif%}">
+				{{build.tag}}
 				<span class="badge">
-					<span class="glyphicon glyphicon-cloud-download"></span> 20
+					<span class="glyphicon glyphicon-cloud-download"></span> {{build.down_count}}
 				</span>
 			</a>
-			<a href="#" class="list-group-item">
-				v1.2.0
-				<span class="badge">
-					<span class="glyphicon glyphicon-cloud-download"></span> 50
-				</span>
-			</a>
+			{% endfor %}
 		</div>
 	</div>
 
