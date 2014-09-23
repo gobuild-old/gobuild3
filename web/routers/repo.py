@@ -25,6 +25,10 @@ def human_duration(value):
 def basename(value): 
     return os.path.basename(value)
 
+@bp.app_template_filter()
+def str2html(value): 
+    return flask.Markup(value.replace('\n', '<br>'))
+
 @bp.route('/<path:reponame>')
 @models.db_session
 def home(reponame):
@@ -68,19 +72,47 @@ def retrive():
     repo.down_count += 1
     build.down_count += 1
 
-    well = '{os} {arch}\nsize: {size}\nsha: {sha}\nmd5: {md5}'.format(
+    well = '{os} {arch}\n<b>ZIP</b>\nsize: {size}\nsha: {zipsha}\nmd5: {zipmd5}'.format(
             os=goos, arch=goarch, 
-            size=humanize.naturalsize(file.size),
-            md5=file.md5sum, sha=file.shasum)
-    file_link = 'http://www.baidu.com/index.php'
+            size=humanize.naturalsize(file.zipsize),
+            zipmd5=file.zipmd5, zipsha=file.zipsha)
     return flask.jsonify(dict(status=0, message='success', 
-        well=well, goos=goos, goarch=goarch, file_link=file.file_link))
+        well=well, goos=goos, goarch=goarch, ziplink=file.ziplink, loglink=file.loglink))
 
-@bp.route('/update')
+@bp.route('/update', methods=['POST'])
+@models.db_session
 def update():
+    def fv(name, default=None):
+        return request.form.get(name, default)
+    bid = int(fv('build_id'))
+    build = models.Build[bid]
+    build.status = fv('status')
+    build.updated = datetime.datetime.today()
+    build.details = fv('details')
+    print request.form
+
     return flask.jsonify(dict(status=0, message='success'))
 
-@bp.route('/commit')
+@bp.route('/commit', methods=['POST'])
+@models.db_session
 def commit():
+    req = json.loads(request.data)
+    build_id = int(req.get('build_id'))
+    build = models.Build[build_id]
+    build.downloadable = req.get('success', False)
+    build.details = req.get('details')
+    build.time_used = req.get('time_used')
+    build.version = req.get('version')
+    if build.downloadable:
+        for osarch, ds in req.get('files').items():
+            goos, arch = osarch.strip().split('_')
+            file = models.File.get(build=build, os=goos, arch=arch) or \
+                    models.File(build=build, os=goos, arch=arch, reponame=build.repo.name)
+            file.loglink = ds.get('loglink')
+            file.ziplink = ds.get('zip').get('link')
+            file.zipsize = ds.get('zip').get('size')
+            file.zipmd5 = ds.get('zip').get('md5')
+            file.zipsha = ds.get('zip').get('sha')
+            #print osarch, ds
     return flask.jsonify(dict(status=0, message='success'))
 

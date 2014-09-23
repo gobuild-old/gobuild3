@@ -60,7 +60,7 @@
 			<h4>Properies</h4>
 			<p><span class="glyphicon glyphicon-time"></span> {{ active_build.updated|strftime }} - [used: {{20|human_duration}}]</p>
 			<p>
-				{{active_build.version}}
+				{{active_build.version|str2html}}
 			</p>
 			{% if active_build.downloadable %}
 			<h5>Download</h5>
@@ -191,7 +191,7 @@ $(".download").click(function(e){
 			well = well.replace(new RegExp('\n','g'), '<br>');
 			$("#well").html(well);
 			if (d.status === 0){
-				saveas(d.file_link);
+				saveas(d.ziplink);
 			}
 		});
 		//a.close();

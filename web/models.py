@@ -37,15 +37,14 @@ class Build(db.Entity):
 class File(db.Entity):
     build = Optional(Build)
     reponame = Optional(unicode)
-    size = Optional(int, default=0)
     pkg_type = Optional(unicode, default='binary') # source or binary
-    compress_type = Optional(unicode, default='zip')
     os = Optional(unicode, default='linux')
     arch = Optional(unicode, default='amd64')
-    file_link = Optional(unicode)
-    log_link = Optional(unicode)
-    md5sum = Optional(unicode)
-    shasum = Optional(unicode)
+    loglink = Optional(unicode)
+    zipmd5 = Optional(unicode)
+    zipsha = Optional(unicode)
+    ziplink = Optional(unicode)
+    zipsize = Optional(int, default=0)
 
 class Timer(db.Entity):
     email = Required(unicode)
@@ -84,14 +83,13 @@ if __name__ == '__main__':
         file = File(build=build)
         file.reponame = repo.name
         file.pkg_type = 'binary'
-        file.compress_type = 'zip'
-        file.size = 1025
         file.os='windows'
         file.arch = 'amd64'
-        file.file_link = 'http://www.baidu.com'
-        file.log_link = 'http://www.baidu.com'
-        file.md5sum = 'slkjfl213kj4124'
-        file.shasum = 'sssshhhhsej23423467890'
+        file.ziplink = 'http://www.baidu.com'
+        file.loglink = 'http://www.baidu.com'
+        file.zipmd5 = 'slkjfl213kj4124'
+        file.zipsha = 'sssshhhhsej23423467890'
+        file.zipsize = 1025
 
         build = Build(repo=repo)
         build.tag = 'tag:v1.0.2'
