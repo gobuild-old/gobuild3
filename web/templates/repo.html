@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Repo{%endblock%}
+{% block title %}{{reponame|basename}}{%endblock%}
 
 {% block body %}
 <div class="row">
@@ -102,6 +102,7 @@
 			</div>
 			{% else %}
 			{{active_build.status}}
+			<pre>{{active_build.details}}</pre>
 			{% endif %}
 
 		</div>

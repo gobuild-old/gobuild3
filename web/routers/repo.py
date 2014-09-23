@@ -21,6 +21,10 @@ def strftime(value, format='%Y-%m-%d %H:%M:%S'):
 def human_duration(value):
     return str(datetime.timedelta(seconds=value))
 
+@bp.app_template_filter()
+def basename(value): 
+    return os.path.basename(value)
+
 @bp.route('/<path:reponame>')
 @models.db_session
 def home(reponame):
