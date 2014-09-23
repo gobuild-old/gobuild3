@@ -23,7 +23,8 @@ class Repo(db.Entity):
 
 class Build(db.Entity):
     repo = Optional(Repo)
-    success = Optional(bool, default=True)
+    downloadable = Optional(bool, default=True)
+    status = Optional(unicode)
     tag = Optional(unicode)
     sha = Optional(unicode)
     time_used = Optional(int)
@@ -31,9 +32,12 @@ class Build(db.Entity):
     down_count = Optional(int, default=0)
     details = Optional(LongStr)
     files = Set("File")
+    version = Optional(unicode)
 
 class File(db.Entity):
     build = Optional(Build)
+    reponame = Optional(unicode)
+    size = Optional(int, default=0)
     pkg_type = Optional(unicode, default='binary') # source or binary
     compress_type = Optional(unicode, default='zip')
     os = Optional(unicode, default='linux')
@@ -75,6 +79,19 @@ if __name__ == '__main__':
         build.updated = datetime.today()
         build.down_count = 3
         build.details = 'lslxlsla build.....'
+        build.version = 'go 1.3.1rc'
+
+        file = File(build=build)
+        file.reponame = repo.name
+        file.pkg_type = 'binary'
+        file.compress_type = 'zip'
+        file.size = 1025
+        file.os='windows'
+        file.arch = 'amd64'
+        file.file_link = 'http://www.baidu.com'
+        file.log_link = 'http://www.baidu.com'
+        file.md5sum = 'slkjfl213kj4124'
+        file.shasum = 'sssshhhhsej23423467890'
 
         build = Build(repo=repo)
         build.tag = 'tag:v1.0.2'
@@ -82,6 +99,8 @@ if __name__ == '__main__':
         build.time_used = 104
         build.updated = datetime.today()
         build.down_count = 2
+        build.downloadable = False
+        build.status = 'build error'
         build.details = 'wwww lslxlsla build.....'
 
 @db_session

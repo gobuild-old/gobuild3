@@ -34,11 +34,22 @@
 		<div class="list-group">
 			{% for build in builds %}
 			<a href="/repo/{{reponame}}?tag={{build.tag}}" 
-				class="list-group-item {%if build.tag==default_tag%}active{%endif%}">
+				class="list-group-item 
+				{%if not build.downloadable%}
+					disabled
+				{%else%}
+					{%if build.tag==active_tag%}active{%endif%}
+				{%endif%}
+				">
+				{%if not build.downloadable%}<del>{%endif%}
 				{{build.tag}}
+				{%if not build.downloadable%}
+					</del>
+				{%else%}
 				<span class="badge">
 					<span class="glyphicon glyphicon-cloud-download"></span> {{build.down_count}}
 				</span>
+				{%endif%}
 			</a>
 			{% endfor %}
 		</div>
@@ -47,16 +58,18 @@
 	<div class="col-md-8" style="padding: 10px 50px; border-left: 1px solid gray">
 		<div class="row">
 			<h4>Properies</h4>
-			<p><span class="glyphicon glyphicon-time"></span> 2013-05-01 04:54:50 - [used: 20s]</p>
-			<p>go {{prop.version.go}}<br>
-			gopm {{prop.version.gopm}}</p>
+			<p><span class="glyphicon glyphicon-time"></span> {{ active_build.updated|strftime }} - [used: {{20|human_duration}}]</p>
+			<p>
+				{{active_build.version}}
+			</p>
+			{% if active_build.downloadable %}
 			<h5>Download</h5>
 			<div>
 				<table class="table">
 					{% for goos in ('windows', 'linux', 'darwin', 'arm') %}
 					<tr>
 						<td>
-							<button class="btn btn-success btn-sm">
+							<button platform="{{goos}}" class="download btn btn-success btn-sm">
 								<span class="glyphicon glyphicon-save"></span> {{goos}}
 							</button>
 						</td>
@@ -81,12 +94,15 @@
 				</table>
 			</div>
 
-			<div class="well">
+			<div class="well" id="well">
 				<u>windows amd64</u><br>
 				size: {{prop.files.linux_386.zip.size}}<br>
 				sha: {{prop.files.linux_386.zip.sha}}<br>
 				md5: {{prop.files.linux_386.zip.md5}}<br>
 			</div>
+			{% else %}
+			{{active_build.status}}
+			{% endif %}
 
 		</div>
 	</div>
@@ -149,8 +165,33 @@
 	</div>
 </div>
 -->
+<script type="text/javascript">
+$(".download").click(function(e){
+		var goos = $(this).attr("platform")
+		var xpath = "input[name="+goos+"-arch]:checked";
+		var arch = $(xpath).val();
 
- <script type="text/javascript">
+		//var a = window.open('ftp://mt.nie.netease.com/airtest-android-res/adb-keyboard.apk', '_blank', 'width=0,height=0,status=0');
+		//a.document.execCommand('SaveAs');
+		$.get('/repo/retrive', {
+			reponame:"{{reponame}}", goos: goos, goarch: arch
+		}, function(d){
+			console.log("message", d.message);
+			var well;
+			if (d.status !== 0){
+				well = "<span style='color:red'>"+goos+"-"+arch+"\n"+d.message+"</span>";
+			} else {
+				well = d.well;
+			}
+			well = well.replace(new RegExp('\n','g'), '<br>');
+			$("#well").html(well);
+		});
+		//a.close();
+		//console.log(goos+arch);
+});
+</script>
+
+<script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'gobuild'; // required: replace example with your forum shortname
 
