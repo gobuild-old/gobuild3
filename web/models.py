@@ -24,15 +24,23 @@ class Repo(db.Entity):
 class Build(db.Entity):
     repo = Optional(Repo)
     downloadable = Optional(bool, default=True)
-    status = Optional(unicode)
+    status = Optional(unicode) # ?
     tag = Optional(unicode)
     sha = Optional(unicode)
-    time_used = Optional(int)
+    time_used = Optional(int) # ?
     updated = Optional(datetime)
     down_count = Optional(int, default=0)
     details = Optional(LongStr)
     files = Set("File")
+    jobs = Set("Job")
     version = Optional(unicode)
+
+class Job(db.Entity):
+    build = Required(Build)
+    status = Optional(unicode, default='initing')
+    created = Optional(datetime)
+    updated = Optional(datetime)
+    output = Optional(LongStr)
 
 class File(db.Entity):
     build = Optional(Build)

@@ -1,6 +1,6 @@
 #coding: utf-8
 '''
-task status : models.Build.status
+task status : models.Job.status
 
 initing -> pending -> building -> uploading -> done
 
@@ -27,18 +27,19 @@ def loopwraper(fn):
     return fn
 
 with models.db_session:
-    builds = models.select(b for b in models.Build if \
+    jobs = models.select(b for b in models.Job if \
             b.status == 'pending')[:]
-    for b in builds:
+    for b in jobs:
         b.status = 'initing'
 
 @loopwraper
 @models.db_session
 def loop_task():
-    builds = models.select(b for b in models.Build if b.status == 'initing')[:]
-    for b in builds:
+    jobs = models.select(b for b in models.Job if b.status == 'initing')[:]
+    for b in jobs:
         b.status = 'pending'
         b.updated = datetime.datetime.today()
+        models.commit()
         que.put(b.id)
         print b.id
     msg = notify.get()

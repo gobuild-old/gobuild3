@@ -1,0 +1,26 @@
+{
+    "id": 2, 
+    "created": 45264321, 
+    "output": "moving,,, uploading", 
+    "files": {
+        "linux_386": {
+            "loglink": "xxx2.log", 
+			"outlink": "got-linux-386.tar.gz", 
+			"md5": "abexq314", 
+			"sha": "shaaaabexq314", 
+			"size": 10000
+        }, 
+        "linux_amd64": {
+            "loglink": "xxxxxxx2.log", 
+			"outlink": "got-linux-amd64.tar.gz", 
+			"md5": "abexq314", 
+			"sha": "shaaaabexq314", 
+			"size": 10000
+        }
+    }, 
+    "repo": "github.com/gobuild/got", 
+    "success": true, 
+    "tag": "branch@master", 
+    "time_used": 400,
+    "version": "go 1.3.1\ngopm 0.8.1"
+}
