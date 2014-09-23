@@ -27,3 +27,9 @@ def home(reponame):
     kwargs['prop'] = v
     return render_template('repo.html', **kwargs)
 
+# FIXME: not finished build page
+@bp.route('/build')
+def build():
+    reponame = request.args.get('reponame')
+    tag = request.args.get('tag')
+    return 'build - %s@%s' %(reponame, tag)

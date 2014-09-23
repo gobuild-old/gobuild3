@@ -80,13 +80,6 @@
         </div>
       </div>
     </nav>
-    <script>
-    $(function(){
-    var select = "a[href="+location.pathname.replace(/\//g, '')+"]";
-	console.log(location.pathname);
-    $(select).parent("li").addClass("active");
-    })
-    </script>
     {% endblock %}
     <noscript>Please enable JavaScript in your browser!</noscript>
     {% with messages = get_flashed_messages() %}

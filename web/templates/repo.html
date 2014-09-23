@@ -9,9 +9,18 @@
 	<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
 	<br>
 	<p>{{repo.description}}</p>
-	<div>
+	<div class="pull-left">
 		<a href="https://godoc.org/{{reponame}}"><img src="https://godoc.org/{{reponame}}?status.svg" alt="GoDoc"></a>
 		<a href="https://gowalker.org/{{reponame}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
+	</div>
+	<div class="pull-right" style="margin-bottom: 10px">
+		<form class="form-inline" role="form" action='/repo/build'>
+			<div class="form-group">
+				<input type="text" class="form-control" name="tag" value="branch:master">
+				<input type="hidden" name="reponame" value="{{reponame}}">
+				<button class="btn btn-info">Build Now</button>
+			</div>
+		</form>
 	</div>
 	<br>
 

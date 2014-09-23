@@ -2,9 +2,9 @@
 {% block title %}Index{% endblock %}
 {% block body %}
 <h3>Cross compile with <span style="color: blue">Windows, Linux and Mac, Arm</span></h3>
-<form role="form">
+<form method="get" role="form">
 	<div class="form-group">
-		<input type="text" class="click-select form-control" placeholder="github address, eg: github.com/codeskyblue/fswatch"/>
+		<input name="address" type="text" class="click-select form-control" placeholder="github address, eg: github.com/codeskyblue/fswatch"/>
 	</div>
 	<button class="btn btn-success">Compile</button>
 </form>
