@@ -46,43 +46,33 @@
 			gopm {{prop.version.gopm}}</p>
 			<h5>Download</h5>
 			<div>
-				{% for goos in ('windows', 'linux', 'darwin', 'arm') %}
-				<label class="radio-inline">
-					<input type="radio" name="goos" value="{{goos}}" checked> {{goos}}
-				</label>
-				{% endfor %}
-			</div>
-			<div>
-				{% for arch in ('amd64', '386') %}
-				<label class="radio-inline">
-					<input type="radio" name="arch" value="{{arch}}" checked> {{arch}}
-				</label>
-				{% endfor %}
-			</div>
-			<br>
-			<div>
-				<button class="btn btn-success btn-sm">
-					<span class="glyphicon glyphicon-save"></span> Download
-				</button>
-				<p>
-			<a href="#">source</a>
-			<a href="#">build-log</a>
-			</p>
-			</div>
-			<br>
-			<div>
-				<label class="radio-inline">
-				  <input type="radio" name="download" value="wget" checked> wget
-				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="download" value="curl"> curl
-				</label>
-				<label class="radio-inline">
-				  <input type="radio" name="download" value="got"> got
-				</label>
-			</div>
-			<div>
-				<input class="form-control" style="width:70%" type="text" value="curl xx">
+				<table class="table">
+					{% for goos in ('windows', 'linux', 'darwin', 'arm') %}
+					<tr>
+						<td>
+							<button class="btn btn-success btn-sm">
+								<span class="glyphicon glyphicon-save"></span> {{goos}}
+							</button>
+						</td>
+						<td>
+							<label class="radio-inline">
+								<input type="radio" name="{{goos}}-arch" value="amd64" checked> amd64
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="{{goos}}-arch" value="386"> 386
+							</label>
+						</td>
+						<td style="width: 40%">
+							<div class="input-group">
+								<input type="text" class="form-control" value="curl xxx">
+							      <span class="input-group-btn">
+								      <button class="btn btn-default" type="button">copy</button>
+							    </span>
+						      </div>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
 			</div>
 
 			<div class="well">
