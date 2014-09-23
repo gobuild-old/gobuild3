@@ -13,17 +13,10 @@ import gcfg
 
 bp = flask.Blueprint('repo', __name__)
 
-@bp.app_template_filter('strftime')
-def strftime(value, format='%Y-%m-%d %H:%M:%S'):
-    return value.strftime(format)
 
 @bp.app_template_filter('human_duration')
 def human_duration(value):
     return str(datetime.timedelta(seconds=value))
-
-@bp.app_template_filter()
-def basename(value): 
-    return os.path.basename(value)
 
 @bp.app_template_filter()
 def str2html(value): 
@@ -33,14 +26,13 @@ def str2html(value):
 @models.db_session
 def home(reponame):
     repo = models.Repo.get(name=reponame)
-    naturaltime = humanize.naturaltime(repo.updated)
     builds = models.select(b for b in models.Build \
             if b.repo == repo).order_by(models.Build.updated)
 
     active_tag = request.args.get('tag', 'branch:master')
     active_build = models.Build.get(repo=repo, tag=active_tag)
 
-    kwargs = dict(reponame=reponame, repo=repo, naturaltime=naturaltime, builds=builds,
+    kwargs = dict(repo=repo, builds=builds,
             active_tag=active_tag, active_build=active_build)
     return render_template('repo.html', **kwargs)
 

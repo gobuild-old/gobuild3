@@ -1,23 +1,22 @@
 {% extends "layout.html" %}
-{% block title %}{{reponame|basename}}{%endblock%}
+{% block title %}{{repo.name|basename}}{%endblock%}
 
 {% block body %}
 <div class="row">
-	<p class="pull-right">Updated {{naturaltime}}</p>
-	<a href="https://{{reponame}}"><strong>{{reponame}}</strong></a>
-	<!--<span class="glyphicon glyphicon-star"></span> 2800-->
+	<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
+	<a href="https://{{repo.name}}"><strong>{{repo.name}}</strong></a>
 	<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
 	<br>
 	<p>{{repo.description}}</p>
 	<div class="pull-left">
-		<a href="https://godoc.org/{{reponame}}"><img src="https://godoc.org/{{reponame}}?status.svg" alt="GoDoc"></a>
-		<a href="https://gowalker.org/{{reponame}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
+		<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>
+		<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
 	</div>
 	<div class="pull-right" style="margin-bottom: 10px">
 		<form class="form-inline" role="form" action='/repo/build'>
 			<div class="form-group">
 				<input type="text" class="form-control" name="tag" value="branch:master">
-				<input type="hidden" name="reponame" value="{{reponame}}">
+				<input type="hidden" name="reponame" value="{{repo.name}}">
 				<button class="btn btn-info">Build Now</button>
 			</div>
 		</form>
@@ -28,12 +27,13 @@
 	</div>
 </div>
 
+{% block info %}
 <div class="row" style="border: 1px solid gray">
 	<div class="col-md-4" style="padding: 10px 10px">
 		<h4>Tags</h4>
 		<div class="list-group">
 			{% for build in builds %}
-			<a href="/repo/{{reponame}}?tag={{build.tag}}" 
+			<a href="/repo/{{repo.name}}?tag={{build.tag}}" 
 				class="list-group-item 
 				{%if not build.downloadable%}
 					disabled
@@ -62,6 +62,7 @@
 			<p>
 				{{active_build.version|str2html}}
 			</p>
+			<a href="/task/list/{{active_build.id}}" class="btn btn-info btn-xs">build history</a>
 			{% if active_build.downloadable %}
 			<h5>Download</h5>
 			<div>
@@ -103,64 +104,8 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
 
-<!--
-<div>
-	<table class="table">
-		<tr>
-			<td>windows</td>
-			<td>amd64</td>
-			<td>5M</td>
-			<td><a href="#">Download<b>[42]</b></a></td>
-			<td><a href="#">sha</a> | <a href="#">md5</a></td>
-			<td><a href="#">Details</a></td>
-		</tr>
-		<tr>
-			<td>linux</td>
-			<td>amd64</td>
-			<td>5M</td>
-			<td><a href="#">Download</a></td>
-			<td><a href="#">sha</a> | <a href="#">md5</a></td>
-		</tr>
-	</table>
-</div>
--->
-
-<div class="panel panel-default">
-  <div class="panel-heading">README.md</div>
-  <div class="panel-body">
-    Panel content
-	hello world
-  </div>
-</div>
-<!--
-<div class="container">
-	<div class="col-md-6">
-		<table class="table">
-			<tr>
-				<th>Update Time:</th>
-				<td>2014/09/20</td>
-			</tr>
-			<tr>
-				<th>Time Used:</th>
-				<td>20s</td>
-			</tr>
-		</table>
-	</div>
-	<div class="col-md-6">
-		<table class="table">
-			<tr>
-				<th>Download Count:</th>
-				<td>30</td>
-			</tr>
-			<tr>
-				<th></th>
-				<td></td>
-			</tr>
-		</table>
-	</div>
-</div>
--->
 <script type="text/javascript">
 function saveas(url){
 		var a = window.open(url, '_blank', 'width=0,height=0,status=0');
@@ -173,7 +118,7 @@ $(".download").click(function(e){
 		var arch = $(xpath).val();
 
 		$.get('/repo/retrive', {
-			reponame:"{{reponame}}", goos: goos, goarch: arch,
+			reponame:"{{repo.name}}", goos: goos, goarch: arch,
 			tag: "{{active_tag}}",
 		}, function(d){
 			console.log("message", d.message);

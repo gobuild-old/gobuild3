@@ -10,6 +10,25 @@ import models
 
 bp = flask.Blueprint('task', __name__)
 
+@bp.route('/<int:tid>')
+@models.db_session
+def home(tid):
+    job = models.Job.get(id=tid)
+    repo = job.build.repo
+    return render_template('task.html', repo=repo, job=job)
+
+@bp.route('/list/<int:bid>')
+@models.db_session
+def tasklist(bid):
+    build = models.Build.get(id=bid)
+    repo = build.repo
+
+    jobs = models.select(b for b in models.Job \
+            if b.build == build).order_by(models.Job.created)
+
+    kwargs = dict(repo=repo, build=build, jobs=jobs)
+    return render_template('tasklist.html', **kwargs)
+
 @bp.route('/update', methods=['POST'])
 @models.db_session
 def update():

@@ -6,12 +6,31 @@
 
 import os
 import flask
+import humanize
 import models
+
 
 app = flask.Flask(__name__)
 app.secret_key = 'some_secret'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # max 16M
 #app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.template_filter()
+def basename(value): 
+    return os.path.basename(value)
+
+@app.template_filter()
+def human_duration(value):
+    return str(datetime.timedelta(seconds=value))
+
+@app.template_filter()
+def naturaltime(value):
+    return humanize.naturaltime(value)
+
+@app.template_filter('strftime')
+def strftime(value, format='%Y-%m-%d %H:%M:%S'):
+    if value is None: return 'unknown'
+    return value.strftime(format)
 
 def register_routers():
     from routers import home
