@@ -37,6 +37,7 @@ def register_routers():
 #    return render_template('login.html', error=error)
 
 port = os.getenv('PORT') or '5000'
+debug = os.getenv('DEBUG') in ('true', '1') or False
 if __name__ == '__main__':
     register_routers()
-    app.run(debug=True, host='0.0.0.0', port=int(port))
+    app.run(debug=debug, host='0.0.0.0', port=int(port))
