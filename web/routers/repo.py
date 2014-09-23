@@ -51,10 +51,18 @@ def retrive():
     reponame = request.args.get('reponame')
     goos = request.args.get('goos')
     goarch = request.args.get('goarch')
+    tag = request.args.get('tag')
 
-    file = models.File.get(reponame=reponame, os=goos, arch=goarch)
+    repo = models.Repo.get(name=reponame)
+
+    build = models.Build.get(repo=repo, tag=tag)
+
+    file = models.File.get(build=build, os=goos, arch=goarch)
     if not file:
         return flask.jsonify(dict(status=1, message='file not found'))
+
+    repo.down_count += 1
+    build.down_count += 1
 
     well = '{os} {arch}\nsize: {size}\nsha: {sha}\nmd5: {md5}'.format(
             os=goos, arch=goarch, 
