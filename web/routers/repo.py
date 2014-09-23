@@ -33,3 +33,23 @@ def build():
     reponame = request.args.get('reponame')
     tag = request.args.get('tag')
     return 'build - %s@%s' %(reponame, tag)
+
+@bp.route('/retrive')
+def retrive():
+    reponame = request.args.get('reponame')
+    goos = request.args.get('goos')
+    goarch = request.args.get('goarch')
+
+    well = 'windows amd64\nsize: 1M\nsha: slalfjj\nmd5: lxlsle'
+    file_link = 'http://www.baidu.com/index.php'
+    return flask.jsonify(dict(status=0, message='success', 
+        well=well, goos=goos, goarch=goarch, file_link=file_link))
+
+@bp.route('/update')
+def update():
+    return flask.jsonify(dict(status=0, message='success'))
+
+@bp.route('/commit')
+def commit():
+    return flask.jsonify(dict(status=0, message='success'))
+
