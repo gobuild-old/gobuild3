@@ -46,7 +46,7 @@ def build(goos, goarch, env={}):
     env.update({'GOOS': goos, 'GOARCH': goarch, 'CGO_ENABLED':'1', 'CC': CC.get(osarch, '')})
 
     logname = 'build-%s-%s.log' %(goos, goarch)
-    outfd = open(logname, 'w')
+    outfd = open(pathjoin(OUTDIR, logname), 'w')
     sh.go.build(_env=env, _err_to_out=True, _out=outfd)
 
     binname = os.path.basename(reponame)
@@ -56,7 +56,7 @@ def build(goos, goarch, env={}):
         binname += '.exe'
 
     outpath = pathjoin(OUTDIR, outname)
-    packer('--nobuild', '-a', binname, '-o', outpath, _err_to_out=True, _tee=outfd)
+    packer('--nobuild', '-a', binname, '-o', outpath, _err_to_out=True, _out=outfd)
     info = outjson['files'][osarch]={}
     info['size'] = os.path.getsize(outpath)
     info['md5'] = hashsum('md5', outpath)
@@ -106,6 +106,7 @@ def main():
 
     outjson['time_used'] = int(time.time())-outjson['created']
     print 'Saving state to out.json'
+    print '------------ out.json -------------'
     with open(pathjoin(OUTDIR, 'out.json'), 'w') as f:
         json.dump(outjson, f)
     print json.dumps(outjson, indent=4)

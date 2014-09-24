@@ -1,18 +1,25 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import time
 import json
+import os
 import sys
+import time
+import traceback
 
-import requests
 import qiniu.io
+import requests
+import sh
 
 import gcfg
+
+DOCKER_IMAGE = 'tt'
 
 server = gcfg.master.server.rstrip('/')
 task_url = server+'/task'
 safe_token = gcfg.safe.token
+
+pathjoin = os.path.join
 
 def safe_patch(fn):
     def _decorator(*args, **kwargs):
@@ -50,18 +57,60 @@ def main():
                 time.sleep(2)
 
             if job_id:
+                workspace = os.path.join(os.getcwd(), 'data', str(job_id))
+                os.makedirs(workspace)
+
+                reponame = r.get('reponame')
+                tag = r.get('tag')
+
                 reply = rpost('/task/update', data=dict(id=job_id, status='building'))
                 print 'reply:', reply
-                time.sleep(2)
-                out = json.load(open('out.json'))
+                #time.sleep(2)
+                ret = sh.docker('run',
+                        '-v', workspace+':/output',
+                        '-e', 'TIMEOUT=10m',
+                        DOCKER_IMAGE,
+                        '--repo', r.get('reponame'),
+                        '--tag', r.get('tag'), 
+                        _err_to_out=True, _out=sys.stdout, _tee=True, _ok_code=range(255))
+
+                jsonpath = pathjoin(workspace, 'out.json')
+                out = json.load(open(pathjoin(workspace, 'out.json'))) if \
+                        os.path.exists(jsonpath) else {}
+                out['success'] = (ret.exit_code == 0)
+                out['output'] = str(ret)
                 out['id'] = job_id
                 out['safe_token'] = safe_token
+                if not out['success']:
+                    print 'here'
+                    rpost('/task/update', data=dict(id=job_id, status='error', 
+                        output = str(ret)))
+                    continue
+
+                rpost('/task/update', data=dict(
+                    id=job_id, 
+                    status='uploading', 
+                    output='bulid success'))
+
+                print 'Uploading files'
+                for osarch, info in out['files'].items():
+                    outname = info.get('outname')
+                    key = pathjoin(reponame, osarch, outname)
+                    print '>> file:', outname
+                    info['outlink'] = upload_file(key, pathjoin(workspace, outname))
+
+                    logname = info.get('logname')
+                    key = pathjoin(reponame, osarch, logname)
+                    print '>> log: ', logname
+                    info['loglink'] = upload_file(key, pathjoin(workspace, logname))
+
+                json.dump(out, open('sample.json', 'w'))
                 reply = rpost('/task/commit', data=json.dumps(out))
                 print 'commit reply:', reply
             else:
-                sys.stdout.write('.')
-                sys.stdout.flush()
+                sys.stdout.write('%s idle\n' % time.strftime("[%Y-%m-%d %H:%M:%S]"))
         except Exception as e:
+            traceback.print_exc()
             print 'exception:', e
             sleep = 5
             print 'retry after %d seconds' %(sleep)

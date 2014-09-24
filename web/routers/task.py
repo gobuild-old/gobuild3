@@ -78,7 +78,7 @@ def commit():
             goos, arch = osarch.strip().split('_')
             file = models.File.get(build=build, os=goos, arch=arch) or \
                     models.File(build=build, os=goos, arch=arch, reponame=build.repo.name)
-            file.loglink = ds.get('loglink')
+            file.loglink = ds.get('loglink', '')
             file.outlink = ds.get('outlink')
             file.size = ds.get('size')
             file.md5 = ds.get('md5')
