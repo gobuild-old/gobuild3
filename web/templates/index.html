@@ -11,13 +11,42 @@
 
 <hr/>
 
-<table class="table table-striped">
-	<tr>
-		<th>Name</th>
-	</tr>
-	<tr>
-		<td>Mark</td>
-	</tr>
-</table>
-<h2>去其他页面看看吧</h2>
+<div class="row">
+	<div class="col-md-6">
+		<h4>Top 10</h4>
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>Updated</th>
+				<th>Download</th>
+			</tr>
+			{% for repo in top_repos %}
+			<tr>
+				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
+				<td>{{repo.updated|naturaltime}}</td>
+				<td>{{repo.down_count}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div class="col-md-6">
+		<h4>New 10</h4>
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>Created</th>
+				<th>Updated</th>
+				<th>Download</th>
+			</tr>
+			{% for repo in new_repos %}
+			<tr>
+				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
+				<td>{{repo.created|naturaltime}}</td>
+				<td>{{repo.updated|naturaltime}}</td>
+				<td>{{repo.down_count}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
 {% endblock %}

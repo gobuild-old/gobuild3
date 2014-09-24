@@ -16,6 +16,7 @@ class Repo(db.Entity):
     name = Required(unicode, unique=True)
     author = Optional(unicode)
     description = Optional(str)
+    created = Optional(datetime)
     updated = Optional(datetime)
     view_count = Optional(int, default=0)
     down_count = Optional(int, default=0)

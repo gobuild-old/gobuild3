@@ -58,6 +58,7 @@
 	<div class="col-md-8" style="padding: 10px 50px; border-left: 1px solid gray">
 		<div class="row">
 			<h4>Properies</h4>
+			{% if active_build %}
 			<p><span class="glyphicon glyphicon-time"></span> {{ active_build.updated|strftime }} - [used: {{20|human_duration}}]</p>
 			<p>
 				{{active_build.version|str2html}}
@@ -98,6 +99,7 @@
 			{% else %}
 			{{active_build.status}}
 			<pre>{{active_build.details}}</pre>
+			{% endif %}
 			{% endif %}
 
 		</div>

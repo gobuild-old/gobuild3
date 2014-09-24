@@ -13,4 +13,4 @@ if test $RET -ne 0
 then
 	echo "Exit code $RET"
 fi
-exit $?
+exit $RET

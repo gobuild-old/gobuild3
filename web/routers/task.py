@@ -119,7 +119,7 @@ def build():
 
     repo = models.Repo.get(name=reponame)
     build = models.Build.get(repo=repo, tag=tag) or \
-            models.Bulid(repo=repo, tag=tag)
+            models.Build(repo=repo, tag=tag)
     job = models.Job(build=build, status='initing')
     job.created = datetime.datetime.today()
     models.commit()
