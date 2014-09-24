@@ -74,6 +74,8 @@ def commit():
         build.downloadable = True
         build.time_used = req.get('time_used')
         build.version = req.get('version')
+        build.repo.updated = build.updated = job.updated
+        build.repo.downloadable = True
 
         for osarch, ds in req.get('files').items():
             goos, arch = osarch.strip().split('_')

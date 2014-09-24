@@ -2,10 +2,13 @@
 {% block title %}{{repo.name|basename}}{%endblock%}
 
 {% block body %}
-<div class="row">
+<div class="container row">
 	<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
-	<a href="https://{{repo.name}}"><strong>{{repo.name}}</strong></a>
-	<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
+	<span style="font-size:20px">
+		<a href="https://{{repo.name}}" class="btn btn-info btn-xs">Source</a>
+		<a href="/repo/{{repo.name}}"><strong>{{repo.name}}</strong></a>
+		<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
+	</span>
 	<br>
 	<p>{{repo.description}}</p>
 	<div class="pull-left">
@@ -15,7 +18,7 @@
 	<div class="pull-right" style="margin-bottom: 10px">
 		<form class="form-inline" role="form" action='/task/build'>
 			<div class="form-group">
-				<input type="text" class="form-control" name="tag" value="{{active_tag}}">
+				<input type="text" class="form-control" name="tag" value="{%if active_tag%}{{active_tag}}{%else%}branch:master{%endif%}">
 				<input type="hidden" name="reponame" value="{{repo.name}}">
 				<button class="btn btn-info">Build Now</button>
 			</div>
@@ -28,7 +31,7 @@
 </div>
 
 {% block info %}
-<div class="row" style="border: 1px solid gray">
+<div class="container row" style="border: 0px solid gray">
 	<div class="col-md-4" style="padding: 10px 10px">
 		<h4>Tags</h4>
 		<div class="list-group">
@@ -97,8 +100,9 @@
 
 			<div class="well" id="well"></div>
 			{% else %}
-			{{active_build.status}}
-			<pre>{{active_build.details}}</pre>
+			<p>
+				<strong>Build Status:</strong> {{active_build.status}}
+			</p>
 			{% endif %}
 			{% endif %}
 

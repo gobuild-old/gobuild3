@@ -24,7 +24,7 @@ class Repo(db.Entity):
 
 class Build(db.Entity):
     repo = Optional(Repo)
-    downloadable = Optional(bool, default=True)
+    downloadable = Optional(bool, default=False)
     status = Optional(unicode) # ?
     tag = Optional(unicode)
     sha = Optional(unicode)

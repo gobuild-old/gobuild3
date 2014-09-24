@@ -89,14 +89,15 @@ def main():
                             lock.release()
                             break
                         if pos == bufio.tell():
-                            time.sleep(2)
+                            time.sleep(1)
                             lock.release()
                             continue
-                        pos = bufio.tell()
                         bufio.read()
                         reply = rpost('/task/update', data=dict(
                             id=job_id, status='building', output=bufio.buf))
                         print reply
+                        sys.stdout.write(bufio.buf[pos:])
+                        pos = bufio.tell()
                         lock.release()
                     print 'loop ended'
                 t = threading.Thread(target=_loop_report_stdout)
@@ -122,7 +123,6 @@ def main():
                 out['id'] = job_id
                 out['safe_token'] = safe_token
                 if not out['success']:
-                    print 'here'
                     rpost('/task/update', data=dict(id=job_id, status='error', 
                         output = str(ret)))
                     continue
@@ -135,12 +135,12 @@ def main():
                 for osarch, info in out['files'].items():
                     outname = info.get('outname')
                     key = pathjoin(reponame, osarch, outname)
-                    print '>> file:', outname
+                    print 'File:', outname
                     info['outlink'] = upload_file(key, pathjoin(workspace, outname))
 
                     logname = info.get('logname')
                     key = pathjoin(reponame, osarch, logname)
-                    print '>> log: ', logname
+                    #print 'Log: ', logname
                     info['loglink'] = upload_file(key, pathjoin(workspace, logname))
 
                 json.dump(out, open('sample.json', 'w'))

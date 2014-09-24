@@ -21,7 +21,7 @@
 				<th>Download</th>
 			</tr>
 			{% for repo in top_repos %}
-			<tr>
+			<tr class="{%if not repo.updated%}danger{%endif%}">
 				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
 				<td>{{repo.updated|naturaltime}}</td>
 				<td>{{repo.down_count}}</td>
@@ -39,7 +39,7 @@
 				<th>Download</th>
 			</tr>
 			{% for repo in new_repos %}
-			<tr>
+			<tr class="{%if not repo.updated%}danger{%endif%}">
 				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
 				<td>{{repo.created|naturaltime}}</td>
 				<td>{{repo.updated|naturaltime}}</td>
