@@ -16,7 +16,7 @@ import sh
 
 import gcfg
 
-DOCKER_IMAGE = 'tt'
+DOCKER_IMAGE = gcfg.slave.docker_image
 
 server = gcfg.master.server.rstrip('/')
 task_url = server+'/task'
