@@ -7,6 +7,8 @@
 import os
 import flask
 import humanize
+
+import ansi2html
 import models
 
 
@@ -27,10 +29,14 @@ def human_duration(value):
 def naturaltime(value):
     return humanize.naturaltime(value)
 
-@app.template_filter('strftime')
+@app.template_filter()
 def strftime(value, format='%Y-%m-%d %H:%M:%S'):
     if value is None: return 'unknown'
     return value.strftime(format)
+
+@app.template_filter('ansi2html')
+def _ansi2html(text):
+    return flask.Markup(ansi2html.convert(text))
 
 def register_routers():
     from routers import home

@@ -42,9 +42,10 @@ def update():
     job = models.Job[bid]
     job.status = fv('status')
     job.updated = datetime.datetime.today()
-    job.output = fv('output', '')
-
     job.build.status = job.status
+    output = fv('output')
+    if output:
+        job.output = output
 
     return flask.jsonify(dict(status=0, message='success'))
 
@@ -109,3 +110,19 @@ def newtask():
     models.commit()
     taskqueue.notify.put(b.id)
     return str(b.id)
+
+@bp.route('/build')
+@models.db_session
+def build():
+    reponame = request.args.get('reponame')
+    tag = request.args.get('tag')
+
+    repo = models.Repo.get(name=reponame)
+    build = models.Build.get(repo=repo, tag=tag) or \
+            models.Bulid(repo=repo, tag=tag)
+    job = models.Job(build=build, status='initing')
+    job.created = datetime.datetime.today()
+    models.commit()
+    taskqueue.notify.put(job.id)
+    return redirect('/task/%d' % job.id)
+

@@ -64,8 +64,8 @@ def build(goos, goarch, env={}):
     info['outname'] = outname
     info['logname'] = logname
 
-def fetch(reponame):
-    sh.gopm.get('-v', '-d', reponame, _err_to_out=True, _out=sys.stdout)
+def fetch(reponame, tag):
+    sh.gopm.get('-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
     sh.go.get('-v', reponame, _err_to_out=True, _out=sys.stdout)
 
 def main():
@@ -85,7 +85,7 @@ def main():
     outjson['files'] = {}
 
     print 'Fetching', reponame
-    fetch(reponame)
+    fetch(reponame, tag)
     rdir = pathjoin(os.getenv('GOPATH'), 'src', args.repo)
     os.chdir(rdir) # change directory
 
@@ -110,10 +110,6 @@ def main():
     with open(pathjoin(OUTDIR, 'out.json'), 'w') as f:
         json.dump(outjson, f)
     print json.dumps(outjson, indent=4)
-    #print 'Moving files ...'
-    #for goos, arch in os_archs:
-    #    logfile = 'build-%s-%s.log' %(goos, arch)
-    #    print 'move', goos, arch
 
 if __name__ == '__main__':
     main()

@@ -13,9 +13,9 @@
 		<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
 	</div>
 	<div class="pull-right" style="margin-bottom: 10px">
-		<form class="form-inline" role="form" action='/repo/build'>
+		<form class="form-inline" role="form" action='/task/build'>
 			<div class="form-group">
-				<input type="text" class="form-control" name="tag" value="branch:master">
+				<input type="text" class="form-control" name="tag" value="{{active_tag}}">
 				<input type="hidden" name="reponame" value="{{repo.name}}">
 				<button class="btn btn-info">Build Now</button>
 			</div>

@@ -4,8 +4,11 @@
 import json
 import os
 import sys
+import signal
+import StringIO
 import time
 import traceback
+import threading
 
 import qiniu.io
 import requests
@@ -20,6 +23,13 @@ task_url = server+'/task'
 safe_token = gcfg.safe.token
 
 pathjoin = os.path.join
+
+def handler(signum, frame):
+    print 'Signal handler called with signal', signum
+    sys.exit(1)
+
+# Set the signal handler and a 5-second alarm
+signal.signal(signal.SIGINT, handler)
 
 def safe_patch(fn):
     def _decorator(*args, **kwargs):
@@ -62,17 +72,47 @@ def main():
 
                 reponame = r.get('reponame')
                 tag = r.get('tag')
+                
+                print 'Handle', job_id, reponame, tag
 
                 reply = rpost('/task/update', data=dict(id=job_id, status='building'))
                 print 'reply:', reply
                 #time.sleep(2)
+                bufio = StringIO.StringIO()
+                lock = threading.Lock()
+                running = True
+                def _loop_report_stdout():
+                    pos = 0
+                    while True:
+                        lock.acquire()
+                        if not running: 
+                            lock.release()
+                            break
+                        if pos == bufio.tell():
+                            time.sleep(2)
+                            lock.release()
+                            continue
+                        pos = bufio.tell()
+                        bufio.read()
+                        reply = rpost('/task/update', data=dict(
+                            id=job_id, status='building', output=bufio.buf))
+                        print reply
+                        lock.release()
+                    print 'loop ended'
+                t = threading.Thread(target=_loop_report_stdout)
+                t.setDaemon(True)
+                t.start()
+
                 ret = sh.docker('run',
                         '-v', workspace+':/output',
                         '-e', 'TIMEOUT=10m',
                         DOCKER_IMAGE,
                         '--repo', r.get('reponame'),
                         '--tag', r.get('tag'), 
-                        _err_to_out=True, _out=sys.stdout, _tee=True, _ok_code=range(255))
+                        _err_to_out=True, _out=bufio, _tee=True, _ok_code=range(255))
+
+                running = False
+                t.join()
 
                 jsonpath = pathjoin(workspace, 'out.json')
                 out = json.load(open(pathjoin(workspace, 'out.json'))) if \
@@ -89,8 +129,7 @@ def main():
 
                 rpost('/task/update', data=dict(
                     id=job_id, 
-                    status='uploading', 
-                    output='bulid success'))
+                    status='uploading'))
 
                 print 'Uploading files'
                 for osarch, info in out['files'].items():

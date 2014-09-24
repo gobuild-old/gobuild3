@@ -36,13 +36,6 @@ def home(reponame):
             active_tag=active_tag, active_build=active_build)
     return render_template('repo.html', **kwargs)
 
-# FIXME: not finished build page
-@bp.route('/build')
-def build():
-    reponame = request.args.get('reponame')
-    tag = request.args.get('tag')
-    return 'build - %s@%s' %(reponame, tag)
-
 @bp.route('/retrive')
 @models.db_session
 def retrive():
@@ -69,39 +62,4 @@ def retrive():
     return flask.jsonify(dict(status=0, message='success', 
         well=well, goos=goos, goarch=goarch, outlink=file.outlink, loglink=file.loglink))
 
-@bp.route('/update', methods=['POST'])
-@models.db_session
-def update():
-    def fv(name, default=None):
-        return request.form.get(name, default)
-    bid = int(fv('build_id'))
-    build = models.Build[bid]
-    build.status = fv('status')
-    build.updated = datetime.datetime.today()
-    build.details = fv('details')
-
-    return flask.jsonify(dict(status=0, message='success'))
-
-@bp.route('/commit', methods=['POST'])
-@models.db_session
-def commit():
-    req = json.loads(request.data)
-    build_id = int(req.get('build_id'))
-    build = models.Build[build_id]
-    build.downloadable = req.get('success', False)
-    build.details = req.get('details')
-    build.time_used = req.get('time_used')
-    build.version = req.get('version')
-    if build.downloadable:
-        for osarch, ds in req.get('files').items():
-            goos, arch = osarch.strip().split('_')
-            file = models.File.get(build=build, os=goos, arch=arch) or \
-                    models.File(build=build, os=goos, arch=arch, reponame=build.repo.name)
-            file.loglink = ds.get('loglink')
-            file.outlink = ds.get('outlink')
-            file.size = ds.get('size')
-            file.md5 = ds.get('md5')
-            file.sha = ds.get('sha')
-            #print osarch, ds
-    return flask.jsonify(dict(status=0, message='success'))
 
