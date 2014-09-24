@@ -3,9 +3,11 @@
 export UMASK=002
 export PATH=$PATH:$GOPATH/bin
 
-test "X$1" == "Xbash" && exec bash
-
-/usr/bin/timeout ${TIMEOUT-30m} "$@"
+if test "X$1" == "Xbash"
+then
+	exec bash
+fi
+/usr/bin/timeout ${TIMEOUT-30m} python /build/crosscompile.py "$@"
 RET=$?
 if test $RET -ne 0
 then
