@@ -7,6 +7,12 @@ if test "X$1" == "Xbash"
 then
 	exec bash
 fi
+
+if test -n "$HTTP_PROXY"
+then
+	git config --global http.proxy "$HTTP_PROXY"
+fi
+
 /usr/bin/timeout ${TIMEOUT-30m} python /build/crosscompile.py "$@"
 RET=$?
 if test $RET -ne 0

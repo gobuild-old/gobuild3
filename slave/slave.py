@@ -54,7 +54,7 @@ def upload_file(key, filename):
     ret, err = qiniu.io.put_file(r.get('uptoken'), key, filename, extra)
     if err is not None:
         sys.stderr.write('error: %s \n' % err)
-        raise err
+        raise Exception(err)
     return r.get('outlink')
 
 def main():
@@ -68,7 +68,8 @@ def main():
 
             if job_id:
                 workspace = os.path.join(os.getcwd(), 'data', str(job_id))
-                os.makedirs(workspace)
+                if not os.path.exists(workspace):
+                    os.makedirs(workspace)
 
                 reponame = r.get('reponame')
                 tag = r.get('tag')
@@ -107,6 +108,7 @@ def main():
                 ret = sh.docker('run',
                         '-v', workspace+':/output',
                         '-e', 'TIMEOUT=10m',
+                        '-e', 'HTTP_PROXY=%s'%gcfg.slave.http_proxy,
                         DOCKER_IMAGE,
                         '--repo', r.get('reponame'),
                         '--tag', r.get('tag'), 
