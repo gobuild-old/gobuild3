@@ -7,6 +7,7 @@ from flask import request, flash, redirect, url_for, render_template
 
 import taskqueue
 import models
+import gcfg
 
 bp = flask.Blueprint('task', __name__)
 
@@ -32,6 +33,9 @@ def tasklist(bid):
 @bp.route('/update', methods=['POST'])
 @models.db_session
 def update():
+    if request.form.get('safe_token') != gcfg.safe.token:
+        return flask.jsonify(dict(content=None))
+
     def fv(name, default=None):
         return request.form.get(name, default)
     bid = int(fv('id'))
@@ -47,6 +51,9 @@ def update():
 @bp.route('/commit', methods=['POST'])
 @models.db_session
 def commit():
+    if request.form.get('safe_token') != gcfg.safe.token:
+        return flask.jsonify(dict(content=None))
+
     req = json.loads(request.data)
     job_id = int(req.get('id'))
     job = models.Job[job_id]
@@ -78,11 +85,13 @@ def commit():
             #print osarch, ds
     return flask.jsonify(dict(status=0, message='success'))
 
-@bp.route('/apply')
+@bp.route('/apply', methods=['POST'])
 @models.db_session
 def apply():
+    if request.form.get('safe_token') != gcfg.safe.token:
+        return flask.jsonify(dict(content=None))
+
     job_id = taskqueue.que.get()
-    print 'apply', job_id
     if not job_id:
         return flask.jsonify(dict(job_id=0))
     job = models.Job[job_id]
