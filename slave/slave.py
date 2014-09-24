@@ -105,7 +105,7 @@ def main():
                 t.setDaemon(True)
                 t.start()
 
-                ret = sh.docker('run',
+                ret = sh.docker('run', '--rm',
                         '-v', workspace+':/output',
                         '-e', 'TIMEOUT=10m',
                         '-e', 'HTTP_PROXY=%s'%gcfg.slave.http_proxy,

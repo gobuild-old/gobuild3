@@ -2,14 +2,14 @@
 {% block title %}{{repo.name|basename}}{%endblock%}
 
 {% block body %}
-<div class="row">
+<div class="container row">
 	<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
 	<a href="https://{{repo.name}}"><strong>{{repo.name}}</strong></a>
 	<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
 	<br>
 	<p>{{repo.description}}</p>
 </div>
-<div class="row">
+<div class="container row">
 <a class="btn btn-info btn-xs" href="/task/list/{{job.build.id}}">&lt; back task list</a>
 <div>
 	<table class="table">
@@ -60,5 +60,5 @@
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     
-
 {% endblock %}
+
