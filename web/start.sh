@@ -2,11 +2,9 @@
 #
 # start server
 
-cd $(dirname $0)
+export DEBUG=true
 
-if test -d venv
-then
-	source venv/bin/activate
-fi
+cd $(dirname $0)
+test -d venv && source venv/bin/activate
 
 exec python web.py

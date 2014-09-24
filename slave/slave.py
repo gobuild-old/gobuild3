@@ -55,6 +55,7 @@ def main():
                 time.sleep(2)
                 out = json.load(open('out.json'))
                 out['id'] = job_id
+                out['safe_token'] = safe_token
                 reply = rpost('/task/commit', data=json.dumps(out))
                 print 'commit reply:', reply
             else:

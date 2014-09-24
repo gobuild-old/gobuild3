@@ -43,6 +43,7 @@ class Job(db.Entity):
     created = Optional(datetime)
     updated = Optional(datetime)
     output = Optional(LongStr)
+    gobuildrc = Optional(LongStr)
 
 class File(db.Entity):
     build = Optional(Build)

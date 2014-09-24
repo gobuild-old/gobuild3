@@ -51,15 +51,16 @@ def update():
 @bp.route('/commit', methods=['POST'])
 @models.db_session
 def commit():
-    if request.form.get('safe_token') != gcfg.safe.token:
+    req = json.loads(request.data)
+    if req.get('safe_token') != gcfg.safe.token:
         return flask.jsonify(dict(content=None))
 
-    req = json.loads(request.data)
     job_id = int(req.get('id'))
     job = models.Job[job_id]
     job.updated = datetime.datetime.today()
     job.output = req.get('output')
     job.version = req.get('version')
+    job.gobuildrc = req.get('gobuildrc')
 
     success = req.get('success', False)
     job.status = 'finished' if success else 'error'
@@ -103,7 +104,6 @@ def apply():
 @models.db_session
 def newtask():
     build = models.Build[1]
-    print build
     b = models.Job(build=build, status='initing')
     b.created = datetime.datetime.today()
     models.commit()

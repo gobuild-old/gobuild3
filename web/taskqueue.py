@@ -41,7 +41,6 @@ def loop_task():
         b.updated = datetime.datetime.today()
         models.commit()
         que.put(b.id)
-        print b.id
     msg = notify.get()
 
 @loopwraper

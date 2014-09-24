@@ -1,6 +1,7 @@
 {
     "id": 2, 
     "created": 45264321, 
+	"gobuildrc": "yxyx: include all",
     "output": "moving,,, uploading", 
     "files": {
         "linux_386": {
