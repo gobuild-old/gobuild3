@@ -24,7 +24,7 @@ def tasklist(bid):
     repo = build.repo
 
     jobs = models.select(b for b in models.Job \
-            if b.build == build).order_by(models.Job.created)
+            if b.build == build).order_by(models.desc(models.Job.created))
 
     kwargs = dict(repo=repo, build=build, jobs=jobs)
     return render_template('tasklist.html', **kwargs)
@@ -40,6 +40,8 @@ def update():
     job.updated = datetime.datetime.today()
     job.output = fv('output', '')
 
+    job.build.status = job.status
+
     return flask.jsonify(dict(status=0, message='success'))
 
 @bp.route('/commit', methods=['POST'])
@@ -50,11 +52,17 @@ def commit():
     job = models.Job[job_id]
     job.updated = datetime.datetime.today()
     job.output = req.get('output')
+    job.version = req.get('version')
+
+    success = req.get('success', False)
+    job.status = 'finished' if success else 'error'
+    print 'job-status:', job.id, job.status
 
     build = job.build
+    build.lastest_job = job.id
+    build.status = job.status
     if req.get('success', False):
         build.downloadable = True
-        #build.details = req.get('output')
         build.time_used = req.get('time_used')
         build.version = req.get('version')
 
@@ -88,6 +96,7 @@ def newtask():
     build = models.Build[1]
     print build
     b = models.Job(build=build, status='initing')
+    b.created = datetime.datetime.today()
     models.commit()
     taskqueue.notify.put(b.id)
     return str(b.id)

@@ -3,6 +3,7 @@
 
 import requests
 import time
+import json
 
 import gcfg
 
@@ -22,7 +23,9 @@ def main():
             reply = rpost('update', data=dict(id=job_id, status='building'))
             print 'reply:', reply
             time.sleep(2)
-            reply = rpost('commit', data=open('out.json'))
+            out = json.load(open('out.json'))
+            out['id'] = job_id
+            reply = rpost('commit', data=json.dumps(out))
             print 'commit reply:', reply
 
         print r

@@ -33,7 +33,9 @@ class Build(db.Entity):
     details = Optional(LongStr)
     files = Set("File")
     jobs = Set("Job")
-    version = Optional(unicode)
+    latest_job = Optional(int, default=0)
+    version = Optional(unicode) #?
+    composite_key(repo, tag)
 
 class Job(db.Entity):
     build = Required(Build)
