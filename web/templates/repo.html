@@ -113,8 +113,11 @@
 
 <script type="text/javascript">
 function saveas(url){
-		var a = window.open(url, '_blank', 'width=0,height=0,status=0');
-		a.document.execCommand('SaveAs');
+	url = 'http://gobuild3-test.qiniudn.com/cow.tgz';
+	var a = $("<a href='"+url+"'>download</a>").get(0);
+	var e = document.createEvent('MouseEvents'); 
+	e.initEvent( 'click', true, true ); 
+	a.dispatchEvent(e); 
 }
 
 $(".download").click(function(e){
