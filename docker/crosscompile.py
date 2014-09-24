@@ -47,7 +47,11 @@ def build(goos, goarch, env={}):
 
     logname = 'build-%s-%s.log' %(goos, goarch)
     outfd = open(pathjoin(OUTDIR, logname), 'w')
-    sh.go.build(_env=env, _err_to_out=True, _out=outfd)
+    try:
+        sh.go.build(_env=env, _err_to_out=True, _out=outfd)
+    except Exception as e:
+        print 'Bulid error(%s/%s): %s' %(goos, goarch, str(e))
+        return False
 
     binname = os.path.basename(reponame)
     ext = 'zip' if goos != 'linux' else 'tar.gz'
@@ -63,6 +67,8 @@ def build(goos, goarch, env={}):
     info['sha'] = hashsum('sha1', outpath)
     info['outname'] = outname
     info['logname'] = logname
+
+    return True
 
 def fetch(reponame, tag):
     sh.gopm.get('-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
