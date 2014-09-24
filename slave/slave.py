@@ -57,6 +57,85 @@ def upload_file(key, filename):
         raise Exception(err)
     return r.get('outlink')
 
+def docker_build(job_id, reponame, tag):
+    print 'Handle', job_id, reponame, tag
+
+    workspace = os.path.join(os.getcwd(), 'data', str(job_id))
+    if not os.path.exists(workspace):
+        os.makedirs(workspace)
+
+    reply = rpost('/task/update', data=dict(id=job_id, status='building'))
+    print 'reply:', reply
+    bufio = StringIO.StringIO()
+    lock = threading.Lock()
+    running = True
+    def _loop_report_stdout():
+        pos = 0
+        while True:
+            lock.acquire()
+            if not running: 
+                lock.release()
+                break
+            if pos == bufio.tell():
+                time.sleep(1)
+                lock.release()
+                continue
+            bufio.read()
+            reply = rpost('/task/update', data=dict(
+                id=job_id, status='building', output=bufio.buf))
+            print reply
+            sys.stdout.write(bufio.buf[pos:])
+            pos = bufio.tell()
+            lock.release()
+        print 'loop ended'
+    t = threading.Thread(target=_loop_report_stdout)
+    t.setDaemon(True)
+    t.start()
+
+    ret = sh.docker('run', '--rm',
+            '-v', workspace+':/output',
+            '-e', 'TIMEOUT=10m',
+            '-e', 'HTTP_PROXY=%s'%gcfg.slave.http_proxy,
+            DOCKER_IMAGE,
+            '--repo', reponame,
+            '--tag', tag, 
+            _err_to_out=True, _out=bufio, _tee=True, _ok_code=range(255))
+
+    running = False
+    t.join()
+
+    jsonpath = pathjoin(workspace, 'out.json')
+    out = json.load(open(pathjoin(workspace, 'out.json'))) if \
+            os.path.exists(jsonpath) else {}
+    out['success'] = (ret.exit_code == 0)
+    out['output'] = str(ret)
+    out['id'] = job_id
+    out['safe_token'] = safe_token
+    if not out['success']:
+        rpost('/task/update', data=dict(id=job_id, status='error', 
+            output = str(ret)))
+        return
+
+    rpost('/task/update', data=dict(
+        id=job_id, 
+        status='uploading'))
+
+    print 'Uploading files'
+    for osarch, info in out['files'].items():
+        outname = info.get('outname')
+        key = pathjoin(reponame, osarch, outname)
+        print 'File:', outname
+        info['outlink'] = upload_file(key, pathjoin(workspace, outname))
+
+        logname = info.get('logname')
+        key = pathjoin(reponame, osarch, logname)
+        #print 'Log: ', logname
+        info['loglink'] = upload_file(key, pathjoin(workspace, logname))
+
+    json.dump(out, open('sample.json', 'w'))
+    reply = rpost('/task/commit', data=json.dumps(out))
+    print 'commit reply:', reply
+
 def main():
     while True:
         try:
@@ -67,87 +146,10 @@ def main():
                 time.sleep(2)
 
             if job_id:
-                workspace = os.path.join(os.getcwd(), 'data', str(job_id))
-                if not os.path.exists(workspace):
-                    os.makedirs(workspace)
-
                 reponame = r.get('reponame')
                 tag = r.get('tag')
                 
-                print 'Handle', job_id, reponame, tag
-
-                reply = rpost('/task/update', data=dict(id=job_id, status='building'))
-                print 'reply:', reply
-                #time.sleep(2)
-                bufio = StringIO.StringIO()
-                lock = threading.Lock()
-                running = True
-                def _loop_report_stdout():
-                    pos = 0
-                    while True:
-                        lock.acquire()
-                        if not running: 
-                            lock.release()
-                            break
-                        if pos == bufio.tell():
-                            time.sleep(1)
-                            lock.release()
-                            continue
-                        bufio.read()
-                        reply = rpost('/task/update', data=dict(
-                            id=job_id, status='building', output=bufio.buf))
-                        print reply
-                        sys.stdout.write(bufio.buf[pos:])
-                        pos = bufio.tell()
-                        lock.release()
-                    print 'loop ended'
-                t = threading.Thread(target=_loop_report_stdout)
-                t.setDaemon(True)
-                t.start()
-
-                ret = sh.docker('run', '--rm',
-                        '-v', workspace+':/output',
-                        '-e', 'TIMEOUT=10m',
-                        '-e', 'HTTP_PROXY=%s'%gcfg.slave.http_proxy,
-                        DOCKER_IMAGE,
-                        '--repo', r.get('reponame'),
-                        '--tag', r.get('tag'), 
-                        _err_to_out=True, _out=bufio, _tee=True, _ok_code=range(255))
-
-                running = False
-                t.join()
-
-                jsonpath = pathjoin(workspace, 'out.json')
-                out = json.load(open(pathjoin(workspace, 'out.json'))) if \
-                        os.path.exists(jsonpath) else {}
-                out['success'] = (ret.exit_code == 0)
-                out['output'] = str(ret)
-                out['id'] = job_id
-                out['safe_token'] = safe_token
-                if not out['success']:
-                    rpost('/task/update', data=dict(id=job_id, status='error', 
-                        output = str(ret)))
-                    continue
-
-                rpost('/task/update', data=dict(
-                    id=job_id, 
-                    status='uploading'))
-
-                print 'Uploading files'
-                for osarch, info in out['files'].items():
-                    outname = info.get('outname')
-                    key = pathjoin(reponame, osarch, outname)
-                    print 'File:', outname
-                    info['outlink'] = upload_file(key, pathjoin(workspace, outname))
-
-                    logname = info.get('logname')
-                    key = pathjoin(reponame, osarch, logname)
-                    #print 'Log: ', logname
-                    info['loglink'] = upload_file(key, pathjoin(workspace, logname))
-
-                json.dump(out, open('sample.json', 'w'))
-                reply = rpost('/task/commit', data=json.dumps(out))
-                print 'commit reply:', reply
+                docker_build(job_id, reponame, tag)
             else:
                 sys.stdout.write('%s idle\n' % time.strftime("[%Y-%m-%d %H:%M:%S]"))
         except Exception as e:
@@ -159,4 +161,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    #print upload_file('hello2.txt', 'out.json')
