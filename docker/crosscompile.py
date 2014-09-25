@@ -49,7 +49,7 @@ def build(goos, goarch, env={}):
     outfd = open(pathjoin(OUTDIR, logname), 'w')
 
     print 'bash$ CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), 'go build'
-    ret = sh.go.build(_env=env, _err_to_out=True, _out=sys.stdout, _ok_code=range(255))
+    ret = sh.go.build(_env=env, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
     if ret.exit_code != 0:
         print 'Bulid error on(%s/%s), exit_code(%d)' %(goos, goarch, ret.exit_code)
         print '------------\n'+str(ret)
@@ -62,7 +62,7 @@ def build(goos, goarch, env={}):
         binname += '.exe'
 
     outpath = pathjoin(OUTDIR, outname)
-    packer('--nobuild', '-a', binname, '-o', outpath, _err_to_out=True, _out=outfd)
+    packer('--nobuild', '-a', binname, '-o', outpath, _err_to_out=True)
     info = outjson['files'][osarch]={}
     info['size'] = os.path.getsize(outpath)
     info['md5'] = hashsum('md5', outpath)
