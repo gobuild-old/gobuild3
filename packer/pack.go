@@ -12,7 +12,6 @@ import (
 
 	"github.com/codegangsta/cli"
 	sh "github.com/codeskyblue/go-sh"
-	"github.com/gobuild/gobuild2/pkg/config"
 )
 
 func findFiles(path string, depth int, skips []*regexp.Regexp) ([]string, error) {
@@ -80,7 +79,7 @@ func Action(c *cli.Context) {
 	}
 
 	// parse yaml
-	pcfg, err := config.ReadPkgConfig(config.RCFILE)
+	pcfg, err := ReadPkgConfig(RCFILE)
 	if err != nil {
 		return
 	}
