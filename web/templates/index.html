@@ -1,52 +1,50 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block body %}
-<h3>Cross compile with <span style="color: blue">Windows, Linux and Mac, Arm</span></h3>
-<form method="get" role="form">
-	<div class="form-group">
-		<input name="address" type="text" class="click-select form-control" placeholder="github address, eg: github.com/codeskyblue/fswatch"/>
+	<h3>Cross compile with <span style="color: blue">Windows, Linux and Mac, Arm</span></h3>
+	<form method="get" role="form">
+		<div class="form-group">
+			<input name="address" type="text" class="click-select form-control" placeholder="github address, eg: github.com/codeskyblue/fswatch"/>
+		</div>
+		<button class="btn btn-success">Compile</button>
+	</form>
+	<hr/>
+	<div class="row">
+		<div class="col-md-6">
+			<h4>Top 10</h4>
+			<table class="table table-striped">
+				<tr>
+					<th>Name</th>
+					<th>Updated</th>
+					<th>Download</th>
+				</tr>
+				{% for repo in top_repos %}
+					<tr class="{%if not repo.updated%}danger{%endif%}">
+						<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
+						<td>{{repo.updated|naturaltime}}</td>
+						<td>{{repo.down_count}}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div class="col-md-6">
+			<h4>New 10</h4>
+			<table class="table table-striped">
+				<tr>
+					<th>Name</th>
+					<th>Created</th>
+					<th>Updated</th>
+					<th>Download</th>
+				</tr>
+				{% for repo in new_repos %}
+					<tr class="{%if not repo.updated%}danger{%endif%}">
+						<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
+						<td>{{repo.created|naturaltime}}</td>
+						<td>{{repo.updated|naturaltime}}</td>
+						<td>{{repo.down_count}}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
-	<button class="btn btn-success">Compile</button>
-</form>
-
-<hr/>
-
-<div class="row">
-	<div class="col-md-6">
-		<h4>Top 10</h4>
-		<table class="table table-striped">
-			<tr>
-				<th>Name</th>
-				<th>Updated</th>
-				<th>Download</th>
-			</tr>
-			{% for repo in top_repos %}
-			<tr class="{%if not repo.updated%}danger{%endif%}">
-				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
-				<td>{{repo.updated|naturaltime}}</td>
-				<td>{{repo.down_count}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-	<div class="col-md-6">
-		<h4>New 10</h4>
-		<table class="table table-striped">
-			<tr>
-				<th>Name</th>
-				<th>Created</th>
-				<th>Updated</th>
-				<th>Download</th>
-			</tr>
-			{% for repo in new_repos %}
-			<tr class="{%if not repo.updated%}danger{%endif%}">
-				<td><a href="/repo/{{repo.name}}">{{repo.name}}</a></td>
-				<td>{{repo.created|naturaltime}}</td>
-				<td>{{repo.updated|naturaltime}}</td>
-				<td>{{repo.down_count}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-</div>
 {% endblock %}

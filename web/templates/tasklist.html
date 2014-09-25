@@ -1,37 +1,36 @@
 {% extends "repo.html" %}
 {% block info %}
-<div class="container row">
-<a href="/repo/{{repo.name}}" class="btn btn-info btn-xs">&lt; back to download page</a>
-<h3>Build Details</h3>
-<table class="table">
-	<tr>
-		<th>Tag</th>
-		<th>Sha</th>
-		<th>Download Count</th>
-	</tr>
-	<tr>
-		<td>{{build.tag}}</td>
-		<td>{{build.sha}}</td>
-		<td>{{build.down_count}}</td>
-	</tr>
-</table>
-
-<h3>Builds History</h3>
-<table class="table">
-	<tr>
-		<th>JobId</th>
-		<th>Status</th>
-		<th>Created Date</th>
-		<th>Last Updated</th>
-	</tr>
-	{% for job in jobs %}
-	<tr>
-		<td><a href="/task/{{job.id}}"><div>{{job.id}}</div></a></td>
-		<td>{{job.status}}</td>
-		<td>{{job.created|strftime}}</td>
-		<td>{{job.updated|strftime}}</td>
-	</tr>
-	{% endfor %}
-</table>
-</div>
+	<div class="container row">
+		<a href="/repo/{{repo.name}}" class="btn btn-info btn-xs">&lt; back to download page</a>
+		<h3>Build Details</h3>
+		<table class="table">
+			<tr>
+				<th>Tag</th>
+				<th>Sha</th>
+				<th>Download Count</th>
+			</tr>
+			<tr>
+				<td>{{build.tag}}</td>
+				<td>{{build.sha}}</td>
+				<td>{{build.down_count}}</td>
+			</tr>
+		</table>
+		<h3>Builds History</h3>
+		<table class="table">
+			<tr>
+				<th>JobId</th>
+				<th>Status</th>
+				<th>Created Date</th>
+				<th>Last Updated</th>
+			</tr>
+			{% for job in jobs %}
+				<tr>
+					<td><a href="/task/{{job.id}}"><div>{{job.id}}</div></a></td>
+					<td>{{job.status}}</td>
+					<td>{{job.created|strftime}}</td>
+					<td>{{job.updated|strftime}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}

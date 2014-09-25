@@ -2,125 +2,109 @@
 <html>
   <head>
     {% block head %}
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-    <meta name="author" content="gobuild3" />
-    <meta name="description" content="golang build website" />
-    <meta name="keywords" content="go, build, share">
-    <!-- Stylesheets -->
-
-    {%if production %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    {%else%}
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="/static/js/jquery-1.10.1.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <!--
-    <link href="/static/css/flat-ui.min.css" rel="stylesheet">
-    <script src="/static/js/flat-ui.min.js"></script>
-    -->
-    {%endif%}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="/static/js/app.js"></script>
-    <title>{% block title %}index{% endblock %} - gobuild3</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+      <meta name="author" content="gobuild3" />
+      <meta name="description" content="golang build website" />
+      <meta name="keywords" content="go, build, share">
+      <!-- Stylesheets -->
+      {%if production %}
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+      {%else%}
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+      <script src="/static/js/jquery-1.10.1.min.js"></script>
+      <script src="/static/js/bootstrap.min.js"></script>
+      <!--
+      <link href="/static/css/flat-ui.min.css" rel="stylesheet">
+      <script src="/static/js/flat-ui.min.js"></script>
+      -->
+      {%endif%}
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+      <script src="/static/js/app.js"></script>
+      <title>{% block title %}index{% endblock %} - gobuild3</title>
     {% endblock %}
-	{% block head_extra %}{% endblock %}
+    {% block head_extra %}{% endblock %}
   </head>
   <body>
     {% block nav %}
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">gobuild3 - build golang online</a>
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">gobuild3 - build golang online</a>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+            <ul class="nav navbar-nav">
+              <!--<li><a href="/">Home</a></li>-->
+              <!--<li><a href="/job">手机集群测试</a></li>-->
+              <li><a href="https://github.com/gobuild/gobuild3">官网</a></li>
+              <!--<li><a href="/doc/">文档</a></li>--> <!-- can use js to control active class -->
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/donate">Donate us ^_^</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/repo/github.com/gobuild/got">Test link</a></li>
+                </ul>
+              </li>
+            </ul>
+            <!--
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://git.mt.nie.netease.com/hzsunshx/airtest">Official Site</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+            -->
+          </div>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-navbar-collapse">
-          <ul class="nav navbar-nav">
-			  <!--<li><a href="/">Home</a></li>-->
-			<!--<li><a href="/job">手机集群测试</a></li>-->
-            <li><a href="https://github.com/gobuild/gobuild3">官网</a></li>
-			<!--<li><a href="/doc/">文档</a></li>--> <!-- can use js to control active class -->
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/donate">Donate us ^_^</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-                <li class="divider"></li>
-                <li><a href="/repo/github.com/gobuild/got">Test link</a></li>
-              </ul>
-            </li>
-          </ul>
-		  <!--
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="http://git.mt.nie.netease.com/hzsunshx/airtest">Official Site</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-		  -->
-        </div>
-      </div>
-    </nav>
+      </nav>
     {% endblock %}
     <noscript>Please enable JavaScript in your browser!</noscript>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="container">
-      <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ message }}
-      </div>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-    
     {% if error %}
-    <div class="container">
-      <div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong></strong> {{ error }}
+      <div class="container">
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <strong></strong> {{ error }}
+        </div>
       </div>
-	{% endif %}
-    </div>
+    {% endif %}
     <div id="content" class="container">{% block body %}{% endblock %}</div>
     <div id="footer" class="container">
       {% block footer %}
-      <p class="text-right">
-	      &copy; Copyright 2014 by <a href="http://github.com/codeskyblue">codeskyblue</a>
-      </p>
+        <p class="text-right">
+        &copy; Copyright 2014 by <a href="http://github.com/codeskyblue">codeskyblue</a>
+        </p>
       {% endblock %}
     </div>
-	<!-- tongji -->
-	<script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-	  ga('create', 'UA-55124209-1', 'auto');
-	  ga('send', 'pageview');
-
-	</script>
+    <!-- tongji -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-55124209-1', 'auto');
+    ga('send', 'pageview');
+    </script>
   </body>
 </html>
