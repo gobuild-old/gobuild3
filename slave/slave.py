@@ -126,12 +126,12 @@ def docker_build(job_id, reponame, tag):
     print 'Uploading files'
     for osarch, info in out['files'].items():
         outname = info.get('outname')
-        key = pathjoin(reponame, osarch, outname)
-        print 'File:', outname
+        key = pathjoin(str(job_id), osarch, outname)
+        print 'File:', outname, key
         info['outlink'] = upload_file(key, pathjoin(workspace, outname))
 
         logname = info.get('logname')
-        key = pathjoin(reponame, osarch, logname)
+        key = pathjoin(str(job_id), osarch, logname)
         #print 'Log: ', logname
         info['loglink'] = upload_file(key, pathjoin(workspace, logname))
 

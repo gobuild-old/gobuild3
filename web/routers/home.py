@@ -12,7 +12,7 @@ def ruok():
     return 'imok'
 
 def cleanname(name):
-    for prefix in 'http://', 'https://':
+    for prefix in 'http://', 'https://', '/':
         if name.startswith(prefix):
             name = name[len(prefix):]
     for suffix in '/', '.git':
@@ -33,7 +33,7 @@ def home():
             repo.author = '.. unfinished'
             models.commit()
 
-        return flask.redirect('/repo/'+address, 302)
+        return flask.redirect('/repo/'+reponame, 302)
 
     new = models.select(r for r in models.Repo).\
             order_by(models.desc(models.Repo.created))[:10]
