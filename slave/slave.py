@@ -11,10 +11,13 @@ import traceback
 import threading
 
 import qiniu.io
+import qiniu.conf
 import requests
 import sh
 
 import gcfg
+
+qiniu.conf.UP_HOST = 'up.qiniug.com'
 
 DOCKER_IMAGE = gcfg.slave.docker_image
 
