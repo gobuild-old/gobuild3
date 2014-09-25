@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}{{repo.name|basename}}{%endblock%}
 	{% block body %}
+		{% block repohead %}
 		<div class="container row">
 			<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
 			<span style="font-size:20px">
@@ -13,7 +14,7 @@
 			<br>
 			<p>{{repo.description}}</p>
 			<div class="pull-left">
-				<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>
+				<!--<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>-->
 				<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
 			</div>
 			<div class="pull-right" style="margin-bottom: 10px">
@@ -26,9 +27,8 @@
 				</form>
 			</div>
 			<br>
-			<div>
-			</div>
 		</div>
+		{% endblock %}
 		{% block info %}
 			<div class="container row" style="border: 0px solid gray">
 				<div class="col-md-4" style="padding: 10px 10px">
@@ -105,7 +105,6 @@
 						</div>
 					</div>
 				</div>
-			{% endblock %}
 			<script type="text/javascript">
 			function saveas(url){
 				var a = $("<a href='"+url+"'>download</a>").get(0);
@@ -138,7 +137,9 @@
 					//console.log(goos+arch);
 			});
 			</script>
+			{% endblock %}
 
+			{% block disqus %}
 			<div id="disqus_thread"></div>
 			<script type="text/javascript">
 			/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -164,7 +165,6 @@
 			</script>
 			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 			<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+			{% endblock %}
 
-
-			
 		{% endblock %}
