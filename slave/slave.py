@@ -127,7 +127,7 @@ def docker_build(job_id, reponame, tag):
     print 'Uploading files'
     for osarch, info in out['files'].items():
         outname = info.get('outname')
-        safetag = ''.join(re.findall('[\w\d-_.]+', tag.replace(':', '-v-')))
+        safetag = ''.join(re.findall('[-_.\w\d]+', tag.replace(':', '-v-')))
         key = pathjoin(reponame, safetag, outname)
         print 'File:', outname, key
         info['outlink'] = upload_file(key, pathjoin(workspace, outname))
