@@ -19,7 +19,7 @@ func findFiles(path string, depth int, skips []*regexp.Regexp) ([]string, error)
 	var files []string
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			log.Warnf("filewalk: %s", err)
+			log.Debugf("filewalk: %s", err)
 			return nil
 		}
 		if info.IsDir() {
@@ -101,7 +101,7 @@ func Action(c *cli.Context) {
 	sess.SetEnv("GOBIN", gobin)
 	log.Debugf("set env GOBIN=%s", gobin)
 	log.Debug("config:", pcfg)
-	pcfg.Filesets.Includes = append(pcfg.Filesets.Includes, adds...)
+	// pcfg.Filesets.Includes = append(pcfg.Filesets.Includes, adds...)
 
 	var skips []*regexp.Regexp
 	for _, str := range pcfg.Filesets.Excludes {
@@ -167,7 +167,15 @@ func Action(c *cli.Context) {
 		}
 		files = append(files, fs...)
 	}
+	// adds - parse by cli
+	files = append(files, adds...)
+	uniqset := make(map[string]bool, len(files))
 	for _, file := range files {
+		file = sanitizedName(file)
+		if uniqset[file] {
+			continue
+		}
+		uniqset[file] = true
 		log.Infof("zip add file: %v", file)
 		if err = z.Add(file); err != nil {
 			return

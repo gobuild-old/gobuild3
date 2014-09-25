@@ -47,10 +47,12 @@ def build(goos, goarch, env={}):
 
     logname = 'build-%s-%s.log' %(goos, goarch)
     outfd = open(pathjoin(OUTDIR, logname), 'w')
-    try:
-        sh.go.build(_env=env, _err_to_out=True, _out=outfd)
-    except Exception as e:
-        print 'Bulid error(%s/%s): %s' %(goos, goarch, str(e))
+
+    print 'bash$ CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), 'go build'
+    ret = sh.go.build(_env=env, _err_to_out=True, _out=sys.stdout, _ok_code=range(255))
+    if ret.exit_code != 0:
+        print 'Bulid error on(%s/%s), exit_code(%d)' %(goos, goarch, ret.exit_code)
+        print '------------\n'+str(ret)
         return False
 
     binname = os.path.basename(reponame)
@@ -71,7 +73,9 @@ def build(goos, goarch, env={}):
     return True
 
 def fetch(reponame, tag):
+    print 'bash$ gopm --strict get -v -d %s@%s' %(reponame, tag)
     sh.gopm('--strict', 'get', '-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
+    print 'bash$ go get -v %s' %(reponame)
     sh.go.get('-v', reponame, _err_to_out=True, _out=sys.stdout)
 
 def main():

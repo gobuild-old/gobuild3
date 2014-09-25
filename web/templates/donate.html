@@ -4,14 +4,24 @@
 		<p class=error><strong>Error:</strong> {{ error }}
 	{% endif %}
 	<h3>Donate</h3>
-	<img src="/static/images/alipay.png"/>
-
-	<hr/>
-
+	<p>
+		This website is writen in my spare time. 
+		It's not easy to maintain it. Machine，Storage,DomainName... a lot place need money.
+		I try my best to make this website well.
+	</p>
+	<p>
+		If you don't like it, please tell me. <a href="https://github.com/gobuild/gobuild3/issues">issue report</a><br/>
+		If you like it, please consider to donate some money for my coffee.
+	</p>
+	<h4>Paypal</h4>
 	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 	<input type="hidden" name="cmd" value="_s-xclick">
 	<input type="hidden" name="hosted_button_id" value="MP4MP7DYF3YL6">
 	<input type="image" src="https://www.paypalobjects.com/en_US/C2/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 	<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 	</form>
+	<hr/>
+	<h4>Alipay</h4>
+	<img src="/static/images/alipay.png"/>
+	
 {% endblock %}
