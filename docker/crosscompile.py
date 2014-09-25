@@ -71,7 +71,7 @@ def build(goos, goarch, env={}):
     return True
 
 def fetch(reponame, tag):
-    sh.gopm.get('-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
+    sh.gopm('--strict', 'get', '-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
     sh.go.get('-v', reponame, _err_to_out=True, _out=sys.stdout)
 
 def main():
