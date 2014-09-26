@@ -19,20 +19,21 @@ def cleanname(name):
     for suffix in '/', '.git':
         if name.endswith(suffix):
             name = name[:-len(suffix)]
+    name = name.replace(':', '/')
     return name
 
 def checkrepo(name):
     ''' return desc '''
-    payload = {'action': 'package', 'id': name}
-    r = requests.get('http://go-search.org/api', params=payload)
-    if not r.text.startswith('{'):
-        raise Exception('error find package in go-search: %s' % r.text)
-
+    payload = {'pkgname': name}
+    requests.get('https://gowalker.org/'+name) # call gowalker to load data
+    r = requests.get('https://gowalker.org/api/v1/pkginfo', params=payload)
     d = r.json()
-    print d
-    if d['Name'] and d['Name'] != 'main':
+    if not d['id']:
+        raise Exception('error load package in https://gowalker.org: %s' % r.text)
+
+    if not d['cmd']:
         raise Exception('Repo: [%s] is a go-lib, this platform only support main package' % name)
-    return d['Synopsis']
+    return d['synopsis']
 
 @bp.route('/')
 @models.db_session
