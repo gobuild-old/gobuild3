@@ -85,7 +85,7 @@ def docker_build(job_id, reponame, tag):
                 time.sleep(1)
                 lock.release()
                 continue
-            #bufio.read()
+            bufio.read()
             reply = rpost('/task/update', data=dict(
                 id=job_id, status='building', output=bufio.buf[pos:], append=1))
             print reply
@@ -106,9 +106,6 @@ def docker_build(job_id, reponame, tag):
             '--tag', tag, 
             _err_to_out=True, _out=bufio, _tee=True, _ok_code=range(255))
 
-    running = False
-    t.join()
-
     jsonpath = pathjoin(workspace, 'out.json')
     out = json.load(open(pathjoin(workspace, 'out.json'))) if \
             os.path.exists(jsonpath) else {}
@@ -125,18 +122,24 @@ def docker_build(job_id, reponame, tag):
         id=job_id, 
         status='uploading'))
 
-    print 'Uploading files'
+    #print 'Uploading files'
+    print >>bufio, 'Uploading files'
+
     for osarch, info in out['files'].items():
         outname = info.get('outname')
         safetag = ''.join(re.findall('[-_.\w\d]+', tag.replace(':', '-v-')))
         key = pathjoin(reponame, safetag, outname)
-        print 'File:', outname, key
+        print >>bufio, 'File:', outname, key
         info['outlink'] = upload_file(key, pathjoin(workspace, outname))
 
         logname = info.get('logname')
         key = pathjoin(str(job_id), osarch, logname)
         #print 'Log: ', logname
         info['loglink'] = upload_file(key, pathjoin(workspace, logname))
+
+    print >>bufio, '==DONE=='
+    running = False
+    t.join()
 
     json.dump(out, open('sample.json', 'w'))
     reply = rpost('/task/commit', data=json.dumps(out))

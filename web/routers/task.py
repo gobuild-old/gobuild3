@@ -62,7 +62,7 @@ def commit():
     job_id = int(req.get('id'))
     job = models.Job[job_id]
     job.updated = datetime.datetime.today()
-    job.output = req.get('output')
+    #job.output = req.get('output')
     job.version = req.get('version')
     job.gobuildrc = req.get('gobuildrc')
 
