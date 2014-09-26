@@ -31,7 +31,9 @@ def home(reponame):
 
     active_tag = request.args.get('tag', 'branch:master')
     build = models.Build.get(repo=repo, tag=active_tag)
-    osarchs = json.loads(build.osarchs) if build else []
+    osarchs = [] 
+    if build and build.osarchs:
+        osarchs = json.loads(build.osarchs)
 
     kwargs = dict(repo=repo, builds=builds,
             active_tag=active_tag, build=build, osarchs=osarchs)
