@@ -60,17 +60,17 @@
 				<div class="col-md-8" style="padding: 10px 50px; border-left: 1px solid gray">
 					<div class="row">
 						<h4>Properies</h4>
-						{% if active_build %}
-							<p><span class="glyphicon glyphicon-time"></span> {{ active_build.updated|strftime }} - [used: {{20|human_duration}}]</p>
+						{% if build %}
+							<p><span class="glyphicon glyphicon-time"></span> {{ build.updated|strftime }} - [used: {{20|human_duration}}]</p>
 							<p>
-							{{active_build.version|str2html}}
+							{{build.version|str2html}}
 							</p>
-							<a href="/task/list/{{active_build.id}}" class="btn btn-info btn-xs">build history</a>
-							{% if active_build.downloadable %}
+							<a href="/task/list/{{build.id}}" class="btn btn-info btn-xs">build history</a>
+							{% if build.downloadable %}
 								<h5>Download</h5>
 								<div>
 									<table class="table">
-										{% for goos, archs in ['windows',('386','amd64')], ['linux',('amd64','386','arm')], ['darwin',('amd64','386')] %}
+										{% for goos, archs in osarchs %}
 											<tr>
 												<td>
 													<button platform="{{goos}}" class="download btn btn-success btn-sm" style="width: 90px; text-align: left">
@@ -99,7 +99,7 @@
 									<div class="well" id="well"></div>
 								{% else %}
 									<p>
-									<strong>Build Status:</strong> {{active_build.status}}
+									<strong>Build Status:</strong> {{build.status}}
 									</p>
 								{% endif %}
 							{% endif %}

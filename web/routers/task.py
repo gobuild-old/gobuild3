@@ -45,7 +45,10 @@ def update():
     job.build.status = job.status
     output = fv('output')
     if output:
-        job.output = output
+        if fv('append'):
+            job.output += output
+        else:
+            job.output = output
 
     return flask.jsonify(dict(status=0, message='success'))
 
@@ -77,8 +80,15 @@ def commit():
         build.repo.updated = build.updated = job.updated
         build.repo.downloadable = True
 
+        osarch_map = {}
         for osarch, ds in req.get('files').items():
             goos, arch = osarch.strip().split('_')
+
+            archs = osarch_map.get(goos, [])
+            archs.append(arch)
+            osarch_map[goos] = archs
+
+
             file = models.File.get(build=build, os=goos, arch=arch) or \
                     models.File(build=build, os=goos, arch=arch, reponame=build.repo.name)
             file.loglink = ds.get('loglink', '')
@@ -87,6 +97,16 @@ def commit():
             file.md5 = ds.get('md5')
             file.sha = ds.get('sha')
             #print osarch, ds
+
+        # store in format: [{"windows": ["386", "amd64"]},..]
+        store_list = []
+        for goos in 'windows', 'linux', 'darwin':
+            archs = osarch_map.get(goos)
+            if archs:
+                archs.sort()
+                store_list.append([goos, archs])
+        build.osarchs = json.dumps(store_list)
+
     return flask.jsonify(dict(status=0, message='success'))
 
 @bp.route('/apply', methods=['POST'])

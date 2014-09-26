@@ -30,10 +30,11 @@ def home(reponame):
             if b.repo == repo).order_by(models.Build.updated)
 
     active_tag = request.args.get('tag', 'branch:master')
-    active_build = models.Build.get(repo=repo, tag=active_tag)
+    build = models.Build.get(repo=repo, tag=active_tag)
+    osarchs = json.loads(build.osarchs) if build else []
 
     kwargs = dict(repo=repo, builds=builds,
-            active_tag=active_tag, active_build=active_build)
+            active_tag=active_tag, build=build, osarchs=osarchs)
     return render_template('repo.html', **kwargs)
 
 @bp.route('/retrive')

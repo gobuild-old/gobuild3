@@ -25,17 +25,19 @@ class Repo(db.Entity):
 class Build(db.Entity):
     repo = Optional(Repo)
     downloadable = Optional(bool, default=False)
-    status = Optional(unicode) # ?
     tag = Optional(unicode)
     sha = Optional(unicode)
-    time_used = Optional(int) # ?
     updated = Optional(datetime)
     down_count = Optional(int, default=0)
-    details = Optional(LongStr)
     files = Set("File")
     jobs = Set("Job")
     latest_job = Optional(int, default=0)
+    osarchs = Optional(LongStr) # json data: [{"windows": ["amd64", "386"], ...]
+
+    status = Optional(unicode) # ?
+    time_used = Optional(int) # ?
     version = Optional(unicode) #?
+
     composite_key(repo, tag)
 
 class Job(db.Entity):
@@ -43,7 +45,7 @@ class Job(db.Entity):
     status = Optional(unicode, default='initing')
     created = Optional(datetime)
     updated = Optional(datetime)
-    output = Optional(LongStr)
+    output = Optional(LongStr, default='')
     gobuildrc = Optional(LongStr)
 
 class File(db.Entity):
@@ -88,6 +90,7 @@ if __name__ == '__main__':
         build.sha = 'slkjfaefr3jr2134j2l3krj'
         build.time_used = 1024
         build.updated = datetime.today()
+        build.downloadable = False
         build.down_count = 3
         build.details = 'lslxlsla build.....'
         build.version = 'go 1.3.1rc'
@@ -109,9 +112,9 @@ if __name__ == '__main__':
         build.time_used = 104
         build.updated = datetime.today()
         build.down_count = 2
-        build.downloadable = False
+        build.downloadable = True
         build.status = 'build error'
-        build.details = 'wwww lslxlsla build.....'
+        build.osarchs = '[["windows", ["amd64", "arm"]], ["linux", ["amd64"]]]'
 
 @db_session
 def add_record(phoneno, jsondata):

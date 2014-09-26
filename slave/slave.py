@@ -18,7 +18,8 @@ import sh
 
 import gcfg
 
-qiniu.conf.UP_HOST = 'up.qiniug.com'
+if gcfg.slave.qiniu_up_host:
+    qiniu.conf.UP_HOST = gcfg.slave.qiniu_up_host
 
 DOCKER_IMAGE = gcfg.slave.docker_image
 
@@ -84,9 +85,9 @@ def docker_build(job_id, reponame, tag):
                 time.sleep(1)
                 lock.release()
                 continue
-            bufio.read()
+            #bufio.read()
             reply = rpost('/task/update', data=dict(
-                id=job_id, status='building', output=bufio.buf))
+                id=job_id, status='building', output=bufio.buf[pos:], append=1))
             print reply
             sys.stdout.write(bufio.buf[pos:])
             pos = bufio.tell()
