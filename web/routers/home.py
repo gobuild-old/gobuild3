@@ -2,6 +2,7 @@
 import datetime
 import time
 import flask
+import requests
 
 import models
 
@@ -20,6 +21,19 @@ def cleanname(name):
             name = name[:-len(suffix)]
     return name
 
+def checkrepo(name):
+    ''' return desc '''
+    payload = {'action': 'package', 'id': name}
+    r = requests.get('http://go-search.org/api', params=payload)
+    if not r.text.startswith('{'):
+        raise Exception('error find package in go-search: %s' % r.text)
+
+    d = r.json()
+    print d
+    if d['Name'] and d['Name'] != 'main':
+        raise Exception('Repo: [%s] is a go-lib, this platform only support main package' % name)
+    return d['Synopsis']
+
 @bp.route('/')
 @models.db_session
 def home():
@@ -27,10 +41,14 @@ def home():
     if address:
         reponame = cleanname(address)
         if not models.Repo.get(name=reponame):
+            try:
+                desc = checkrepo(reponame)
+            except Exception as e:
+                return flask.render_template('index.html', error=str(e))
             repo = models.Repo(name=reponame)
             repo.created = datetime.datetime.today()
-            repo.description = '.. unfinished'
-            repo.author = '.. unfinished'
+            repo.description = desc
+            repo.author = 'unknown .. unfinished'
             models.commit()
 
         return flask.redirect('/repo/'+reponame, 302)
@@ -42,3 +60,4 @@ def home():
 
     error = 'Beta version, only for test for the time now.'
     return flask.render_template('index.html', top_repos=top, new_repos=new, error=error)
+
