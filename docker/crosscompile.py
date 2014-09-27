@@ -55,7 +55,7 @@ def build(goos, goarch, env={}):
     outpath = pathjoin(OUTDIR, outname)
 
     print BASHPS1+'CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), 'packer --debug -o %s' % outpath
-    ret = packer('--debug', '-o', outpath, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
+    ret = packer('--debug', '-o', outpath, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255), _env=env)
     #ret = sh.go.build(_env=env, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
     if ret.exit_code != 0:
         print 'Bulid error on(%s/%s), exit_code(%d)' %(goos, goarch, ret.exit_code)
