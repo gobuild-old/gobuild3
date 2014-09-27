@@ -19,6 +19,7 @@ reponame = ''
 
 outjson = {}
 OUTDIR = '/output'
+BASHPS1 = '\033[95mbash$ \033[0m'
 
 osxenv = '/osxcross/target/bin/osxcross-env'
 CC = dict(linux_arm='arm-linux-gnueabi-gcc',
@@ -51,17 +52,16 @@ def build(goos, goarch, env={}):
     basename = os.path.basename(reponame)
     ext = 'zip' if goos != 'linux' else 'tar.gz'
     outname = '%s-%s-%s.%s' %(basename, goos, goarch, ext)
+    outpath = pathjoin(OUTDIR, outname)
 
-    print 'bash$ CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), './packer --debug -o %s' % outname
-    ret = packer('--debug', '-o', outname, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
+    print BASHPS1+'CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), 'packer --debug -o %s' % outpath
+    ret = packer('--debug', '-o', outpath, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
     #ret = sh.go.build(_env=env, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
     if ret.exit_code != 0:
         print 'Bulid error on(%s/%s), exit_code(%d)' %(goos, goarch, ret.exit_code)
-        print '------------\n'+str(ret)
+        print '------------\n\033[93m'+str(ret)+'\033[0m' # warning color
         return False
 
-    outpath = pathjoin(OUTDIR, outname)
-    #packer( '-a', binname, '-o', outpath, _err_to_out=True)
     info = outjson['files'][osarch]={}
     info['size'] = os.path.getsize(outpath)
     info['md5'] = hashsum('md5', outpath)
@@ -72,7 +72,7 @@ def build(goos, goarch, env={}):
     return True
 
 def fetch(reponame, tag):
-    print 'bash$ gopm --strict get -v -d %s@%s' %(reponame, tag)
+    print BASHPS1+'gopm --strict get -v -d %s@%s' %(reponame, tag)
     sh.gopm('--strict', 'get', '-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
     print 'bash$ go get -v -d %s' %(reponame)
     sh.go.get('-v', '-d', reponame, _err_to_out=True, _out=sys.stdout)
@@ -98,14 +98,14 @@ def main():
     rdir = pathjoin(os.getenv('GOPATH'), 'src', args.repo)
     os.chdir(rdir) # change directory
 
-    outjson['gobuildrc'] = open('.gobuildrc').read() if os.path.exists('.gobuildrc') else '# nothing'
+    outjson['gobuildrc'] = open('.gobuild.yml').read() if os.path.exists('.gobuild.yml') else '# nothing'
 
     os_archs = [('linux','amd64'), ('linux','386'), ('linux','arm'),
             ('windows','amd64'), ('windows','386'),
             ('darwin','amd64'), ('darwin','386')]
 
     for goos, arch in os_archs:
-        print 'Building for %s,%s' %(goos, arch)
+        print '\033[92m'+'Building for %s,%s'+'\033[0m' %(goos, arch) # green color
         env = {}
         if goos == 'darwin':
             exportenv = str(sh.bash('-c', osxenv))
