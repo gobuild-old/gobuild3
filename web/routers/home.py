@@ -45,7 +45,12 @@ def home():
         reponame = cleanname(address)
         if not models.Repo.get(name=reponame):
             try:
-                desc = checkrepo(reponame)
+                nocheck = 'nocheck-'
+                if reponame.startswith(nocheck):
+                    reponame = reponame[len(nocheck):]
+                    desc = 'unknown desc'
+                else:
+                    desc = checkrepo(reponame)
             except Exception as e:
                 return flask.render_template('index.html', error=str(e))
             repo = models.Repo(name=reponame)
