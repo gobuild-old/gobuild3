@@ -3,6 +3,7 @@ import datetime
 import time
 import flask
 import requests
+from flask import request, flash, redirect, url_for, render_template
 
 import models
 
@@ -62,3 +63,19 @@ def home():
     error = 'Beta version, only for test for the time now.'
     return flask.render_template('index.html', top_repos=top, new_repos=new, error=error)
 
+@bp.route('/<path:reponame>')
+@models.db_session
+def repo(reponame):
+    repo = models.Repo.get(name=reponame)
+    builds = models.select(b for b in models.Build \
+            if b.repo == repo).order_by(models.Build.updated)
+
+    active_tag = request.args.get('tag', 'branch:master')
+    build = models.Build.get(repo=repo, tag=active_tag)
+    osarchs = [] 
+    if build and build.osarchs:
+        osarchs = json.loads(build.osarchs)
+
+    kwargs = dict(repo=repo, builds=builds,
+            active_tag=active_tag, build=build, osarchs=osarchs)
+    return render_template('repo.html', **kwargs)

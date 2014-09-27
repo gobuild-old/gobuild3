@@ -25,19 +25,7 @@ def str2html(value):
 @bp.route('/<path:reponame>')
 @models.db_session
 def home(reponame):
-    repo = models.Repo.get(name=reponame)
-    builds = models.select(b for b in models.Build \
-            if b.repo == repo).order_by(models.Build.updated)
-
-    active_tag = request.args.get('tag', 'branch:master')
-    build = models.Build.get(repo=repo, tag=active_tag)
-    osarchs = [] 
-    if build and build.osarchs:
-        osarchs = json.loads(build.osarchs)
-
-    kwargs = dict(repo=repo, builds=builds,
-            active_tag=active_tag, build=build, osarchs=osarchs)
-    return render_template('repo.html', **kwargs)
+    return redirect('/'+reponame)
 
 @bp.route('/retrive')
 @models.db_session
