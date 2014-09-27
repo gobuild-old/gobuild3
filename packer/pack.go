@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 
 	"github.com/gobuild/log"
@@ -68,12 +67,8 @@ func Action(c *cli.Context) {
 		return
 	}
 
-	if goos == "" {
-		goos = runtime.GOOS
-	}
-	if goarch == "" {
-		goarch = runtime.GOARCH
-	}
+	log.Debugf("os: %s, arch: %s", goos, goarch)
+
 	var err error
 	defer func() {
 		if err != nil {
