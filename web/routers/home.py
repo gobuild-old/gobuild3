@@ -59,7 +59,7 @@ def home():
             repo.author = 'unknown .. unfinished'
             models.commit()
 
-        return flask.redirect('/repo/'+reponame, 302)
+        return flask.redirect('/'+reponame, 302)
 
     new = models.select(r for r in models.Repo).\
             order_by(models.desc(models.Repo.created))[:10]
@@ -73,6 +73,9 @@ def home():
 @models.db_session
 def repo(reponame):
     repo = models.Repo.get(name=reponame)
+    if not repo:
+        return flask.redirect('/?address='+reponame)
+
     builds = models.select(b for b in models.Build \
             if b.repo == repo).order_by(models.Build.updated)
 
