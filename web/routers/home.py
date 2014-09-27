@@ -45,7 +45,12 @@ def home():
         reponame = cleanname(address)
         if not models.Repo.get(name=reponame):
             try:
-                desc = checkrepo(reponame)
+                nocheck = 'nocheck-'
+                if reponame.startswith(nocheck):
+                    reponame = reponame[len(nocheck):]
+                    desc = 'unknown desc'
+                else:
+                    desc = checkrepo(reponame)
             except Exception as e:
                 force_add = '''If you confirm this is a go main package. Click <a class="btn btn-warning btn-xs" href="/address=nocheck-%s">force add</a>''' %(reponame)
                 error = str(e) + ' <br>- ' + force_add
