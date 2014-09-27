@@ -90,3 +90,7 @@ def repo(reponame):
     kwargs = dict(repo=repo, builds=builds,
             active_tag=active_tag, build=build, osarchs=osarchs)
     return render_template('repo.html', **kwargs)
+
+@bp.route('/badge/<path:whatever>')
+def badge(whatever):
+    return bp.send_static_file(os.path.join('images/badge.svg'))
