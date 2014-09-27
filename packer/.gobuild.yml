@@ -1,0 +1,17 @@
+author: codeskyblue@gmail.com
+description: >
+        Hmm. this is a test.
+        hahaha
+
+filesets:
+    includes:
+        - conf
+        - README.md
+        - LICENSE
+    excludes:
+        - \.git
+settings:
+        build: |
+            go install -v
+        outfiles:
+            - packer

@@ -12,6 +12,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	sh "github.com/codeskyblue/go-sh"
+	"github.com/gobuild/goyaml"
 )
 
 func findFiles(path string, depth int, skips []*regexp.Regexp) ([]string, error) {
@@ -56,6 +57,16 @@ func Action(c *cli.Context) {
 	var nobuild = c.Bool("nobuild")
 	var adds = c.StringSlice("add")
 	var rmflag = c.Bool("rm")
+
+	if c.Bool("debug") {
+		log.SetOutputLevel(log.Ldebug)
+	}
+
+	if c.Bool("init") {
+		data, _ := goyaml.Marshal(DefaultPcfg)
+		fmt.Print(string(data))
+		return
+	}
 
 	if goos == "" {
 		goos = runtime.GOOS
@@ -107,6 +118,10 @@ func Action(c *cli.Context) {
 	var skips []*regexp.Regexp
 	for _, str := range pcfg.Filesets.Excludes {
 		skips = append(skips, regexp.MustCompile("^"+str+"$"))
+	}
+	var needs []*regexp.Regexp
+	for _, str := range pcfg.Filesets.Includes {
+		needs = append(needs, regexp.MustCompile("^"+str+"$"))
 	}
 
 	log.Infof("archive file to: %s", output)
@@ -176,6 +191,7 @@ func Action(c *cli.Context) {
 		}
 		files = append(files, fs...)
 	}
+
 	// adds - parse by cli
 	files = append(files, adds...)
 	uniqset := make(map[string]bool, len(files))

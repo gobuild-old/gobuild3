@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 
 	"github.com/codeskyblue/go-sh"
@@ -28,9 +27,9 @@ var DefaultPcfg *PackageConfig
 
 func init() {
 	pcfg := &PackageConfig{}
+	pcfg.Author = ""
 	pcfg.Filesets.Includes = []string{"README.md", "LICENSE"}
-	pcfg.Filesets.Excludes = []string{".*.go"}
-	// pcfg.Settings.CGOEnable = true // the default CGOEnable should be nil
+	pcfg.Filesets.Excludes = []string{"\\.git"}
 	pcfg.Settings.TargetDir = ""
 	pcfg.Settings.Build = "go install -v"
 	DefaultPcfg = pcfg
@@ -51,6 +50,5 @@ func ReadPkgConfig(filepath string) (pcfg PackageConfig, err error) {
 	} else {
 		pcfg = *DefaultPcfg
 	}
-	fmt.Printf("%#v\n", pcfg)
 	return pcfg, nil
 }

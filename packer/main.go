@@ -36,6 +36,8 @@ func init() {
 		cli.StringFlag{Name: "gom", Value: "go", Usage: "go package manage program"},
 		cli.BoolFlag{Name: "nobuild", Usage: "donot call go build when pack"},
 		cli.BoolFlag{Name: "rm", Usage: "remove build files when done"},
+		cli.BoolFlag{Name: "debug", Usage: "show debug information"},
+		cli.BoolFlag{Name: "init", Usage: "generate sample .gobuild.yml"},
 		cli.StringSliceFlag{Name: "add,a", Value: &cli.StringSlice{}, Usage: "add file"},
 	}
 }

@@ -18,7 +18,7 @@ Now the web support the following features.
 * Rank the most download repos and latest repos.
 * Support `.gobuild.yml` file to custom build actions
 
-## .gobulid.yml format (TODO: not finished and checked)
+## .gobulid.yml format (TODO: not online)
 
 ```
 author: codeskyblue@gmail.com
@@ -29,33 +29,33 @@ description: >
 filesets:
     includes:
         - conf
-        - README[.].*
+        - README.md
         - LICENSE
     excludes:
         - \.git
 settings:
-        build:
-                setup: |
-                        make prepare
-                action: go install -v
-                teardown: make clean
+        build: |
+            go install -v
         outfiles:
-                - cgotest
-
+            - packer
 ```
 This is a full version of `.gobuild.yml`, this file should commit the your repo with directory which contains go source code.
 
-filesets use regex to filter file, include will do before exclude. 
+Only filesets.excludes use regex to filter file, the filesets.include not use regex, please do remember.
+(If you got any idea to let includes support regex, pull requests are welcome.)
+
 Use `packer` to check if `.gobuild.yml` is right.
 
 	go get github.com/gobuild/gobuild3/packer
+
+`packer --init` can also generate sample `.gobuild.yml`
 
 Default values:
 
 * settings.bulid.action --- gobuild
 * settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` auto when build for windows
 * filesets.includes --- ["README.md", "LICENSE"]
-
+* filesets.excludes --- ["\.git"]
 other setting default empty.
 
 ## LINCENSE
