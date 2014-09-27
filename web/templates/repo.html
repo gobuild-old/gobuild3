@@ -16,7 +16,9 @@
 			<div class="pull-left">
 				<!--<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>-->
 				<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>
-				<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>
+				<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/source-github-blue.svg?style=flat"></a>
+				<a href="http://beta.gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/download-gobuild-green.svg?style=flat"></a>
+				<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
 			</div>
 			<div class="pull-right" style="margin-bottom: 10px">
 				<form class="form-inline" role="form" action='/task/build'>
