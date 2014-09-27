@@ -74,7 +74,7 @@ def build(goos, goarch, env={}):
 def fetch(reponame, tag):
     print BASHPS1+'gopm --strict get -v -d %s@%s' %(reponame, tag)
     sh.gopm('--strict', 'get', '-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
-    print 'bash$ go get -v -d %s' %(reponame)
+    print BASHPS1+'go get -v -d %s' %(reponame)
     sh.go.get('-v', '-d', reponame, _err_to_out=True, _out=sys.stdout)
 
 def main():
@@ -105,7 +105,7 @@ def main():
             ('darwin','amd64'), ('darwin','386')]
 
     for goos, arch in os_archs:
-        print '\033[92m'+'Building for %s,%s'+'\033[0m' %(goos, arch) # green color
+        print '\033[92mBuilding for %s,%s\033[0m' %(goos, arch) # green color
         env = {}
         if goos == 'darwin':
             exportenv = str(sh.bash('-c', osxenv))
