@@ -47,7 +47,9 @@ def home():
             try:
                 desc = checkrepo(reponame)
             except Exception as e:
-                return flask.render_template('index.html', error=str(e))
+                force_add = '''If you confirm this is a go main package. Click <a class="btn btn-warning btn-xs" href="/address=nocheck-%s">force add</a>''' %(reponame)
+                error = str(e) + ' <br>- ' + force_add
+                return flask.render_template('index.html', error=flask.Markup(error))
             repo = models.Repo(name=reponame)
             repo.created = datetime.datetime.today()
             repo.description = desc
