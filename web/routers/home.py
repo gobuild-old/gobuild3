@@ -15,6 +15,7 @@ def ruok():
     return 'imok'
 
 def cleanname(name):
+    name = name.strip()
     for prefix in 'http://', 'https://', '/':
         if name.startswith(prefix):
             name = name[len(prefix):]
