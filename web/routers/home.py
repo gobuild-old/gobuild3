@@ -95,3 +95,7 @@ def repo(reponame):
 @bp.route('/badge/<path:whatever>')
 def badge(whatever):
     return flask.send_from_directory('static/images', 'badge.svg')
+
+@bp.route('/download/<path:reponame>')
+def download(reponame):
+    return redirect('/'+reponame)
