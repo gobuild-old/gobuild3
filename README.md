@@ -21,22 +21,27 @@ Now the web support the following features.
 ## .gobulid.yml format (TODO: not finished and checked)
 
 ```
+author: codeskyblue@gmail.com
+description: >
+        Hmm. this is a test.
+        hahaha
+
 filesets:
-	- includes:
-		- README[.].*
-		- LICENSE
-	- excludes:
-		- .*\.log
+    includes:
+        - conf
+        - README[.].*
+        - LICENSE
+    excludes:
+        - \.git
 settings:
-	- build:
-		- setup:
-			make prepare
-		- action:
-			["go", "build"]"
-		- teardown:
-			make clean
-		- outfiles:
-		    ["cgotest"]
+        build:
+                setup: |
+                        make prepare
+                action: go install -v
+                teardown: make clean
+        outfiles:
+                - cgotest
+
 ```
 This is a full version of `.gobuild.yml`, this file should commit the your repo with directory which contains go source code.
 

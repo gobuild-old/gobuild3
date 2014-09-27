@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"github.com/codeskyblue/go-sh"
@@ -8,13 +9,16 @@ import (
 )
 
 type PackageConfig struct {
-	Filesets struct {
+	Author      string `yaml:"author"`
+	Description string `yaml:"description"`
+	Filesets    struct {
 		Includes []string `yaml:"includes"`
 		Excludes []string `yaml:"excludes"`
 	} `yaml:"filesets"`
 	Settings struct {
-		TargetDir string `yaml:"targetdir"` // target dir
-		Addopts   string `yaml:"addopts"`   // extra command line options
+		TargetDir string   `yaml:"targetdir"` // target dir
+		Outfiles  []string `yaml:"outfiles"`
+		Build     string   `yaml:"build"`
 	} `yaml:"settings"`
 }
 
@@ -28,7 +32,7 @@ func init() {
 	pcfg.Filesets.Excludes = []string{".*.go"}
 	// pcfg.Settings.CGOEnable = true // the default CGOEnable should be nil
 	pcfg.Settings.TargetDir = ""
-	pcfg.Settings.Addopts = ""
+	pcfg.Settings.Build = "go install -v"
 	DefaultPcfg = pcfg
 }
 
@@ -47,5 +51,6 @@ func ReadPkgConfig(filepath string) (pcfg PackageConfig, err error) {
 	} else {
 		pcfg = *DefaultPcfg
 	}
+	fmt.Printf("%#v\n", pcfg)
 	return pcfg, nil
 }

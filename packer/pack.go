@@ -55,6 +55,7 @@ func Action(c *cli.Context) {
 	var gom = c.String("gom")
 	var nobuild = c.Bool("nobuild")
 	var adds = c.StringSlice("add")
+	var rmflag = c.Bool("rm")
 
 	if goos == "" {
 		goos = runtime.GOOS
@@ -131,7 +132,8 @@ func Action(c *cli.Context) {
 		return
 	}
 
-	var files []string
+	var files = []string{}
+	var buildFiles = pcfg.Settings.Outfiles
 	// build source
 	if !nobuild {
 		targetDir := sanitizedName(pcfg.Settings.TargetDir)
@@ -143,19 +145,26 @@ func Action(c *cli.Context) {
 			log.Fatalf("os symlink error: %s", err)
 		}
 		defer os.Remove(symdir)
-		opts := []string{"install", "-v"}
-		opts = append(opts, strings.Fields(pcfg.Settings.Addopts)...) // TODO: here need to use shell args parse lib
-		if err = sess.Command("go", opts).Run(); err != nil {
+		// opts := []string{"install", "-v"}
+		// opts = append(opts, strings.Fields(pcfg.Settings.Addopts)...) // TODO: here need to use shell args parse lib
+		println(pcfg.Settings.Build)
+		if err = sess.Command("bash", "-c", pcfg.Settings.Build).Run(); err != nil {
+			// if err = sess.Command("go", opts).Run(); err != nil {
 			return
 		}
 		os.Remove(symdir) // I have to do it twice
-		cwd, _ := os.Getwd()
-		program := filepath.Base(cwd)
-		if goos == "windows" {
-			program += ".exe"
+
+		if len(buildFiles) == 0 {
+			cwd, _ := os.Getwd()
+			program := filepath.Base(cwd)
+			buildFiles = append(buildFiles, program)
 		}
-		if sh.Test("file", program) {
-			files = append(files, program)
+
+		for _, filename := range buildFiles {
+			if goos == "windows" {
+				filename += ".exe"
+			}
+			files = append(files, filename)
 		}
 	}
 
@@ -183,4 +192,13 @@ func Action(c *cli.Context) {
 	}
 	log.Info("finish archive file")
 	err = z.Close()
+
+	if rmflag {
+		for _, filename := range buildFiles {
+			if goos == "windows" {
+				filename += ".exe"
+			}
+			os.Remove(filename)
+		}
+	}
 }
