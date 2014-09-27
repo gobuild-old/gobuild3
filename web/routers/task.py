@@ -2,6 +2,8 @@
 import time
 import json
 import datetime
+import Queue
+
 import flask
 from flask import request, flash, redirect, url_for, render_template
 
@@ -115,8 +117,9 @@ def apply():
     if request.form.get('safe_token') != gcfg.safe.token:
         return flask.jsonify(dict(content=None))
 
-    job_id = taskqueue.que.get()
-    if not job_id:
+    try:
+        job_id = taskqueue.que.get_nowait()
+    except Queue.Empty:
         return flask.jsonify(dict(job_id=0))
     job = models.Job[job_id]
     reponame = job.build.repo.name
@@ -130,7 +133,7 @@ def newtask():
     b = models.Job(build=build, status='initing')
     b.created = datetime.datetime.today()
     models.commit()
-    taskqueue.notify.put(b.id)
+    taskqueue.que.put(b.id)
     return str(b.id)
 
 @bp.route('/build')
@@ -145,6 +148,6 @@ def build():
     job = models.Job(build=build, status='initing')
     job.created = datetime.datetime.today()
     models.commit()
-    taskqueue.notify.put(job.id)
+    taskqueue.que.put(job.id)
     return redirect('/task/%d' % job.id)
 

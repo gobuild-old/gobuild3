@@ -18,7 +18,7 @@ Now the web support the following features.
 * Rank the most download repos and latest repos.
 * Support `.gobuild.yml` file to custom build actions
 
-## .gobulid.yml format (TODO: not online)
+## .gobulid.yml format
 
 ```
 author: codeskyblue@gmail.com
@@ -34,6 +34,7 @@ filesets:
     excludes:
         - \.git
 settings:
+        targetdir: ""
         build: |
             go install -v
         outfiles:
@@ -49,6 +50,8 @@ Use `packer` to check if `.gobuild.yml` is right.
 	go get github.com/gobuild/gobuild3/packer
 
 `packer --init` can also generate sample `.gobuild.yml`
+
+settings.targetdir will set to env GOBIN, which will make sure `go install` install to the right dir.
 
 Default values:
 

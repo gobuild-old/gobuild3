@@ -10,6 +10,8 @@ import StringIO
 import time
 import traceback
 import threading
+import humanize
+import Queue
 
 import qiniu.io
 import qiniu.conf
@@ -145,9 +147,36 @@ def docker_build(job_id, reponame, tag):
     reply = rpost('/task/commit', data=json.dumps(out))
     print 'commit reply:', reply
 
-def main():
+
+naturaldelta = humanize.time.naturaldelta
+que = Queue.Queue()
+
+def job_manager():
     while True:
+        job_id, reponame, tag = que.get()
         try:
+            docker_build(job_id, reponame, tag)
+        except Exception as e:
+            output = traceback.format_exc()
+            rpost('/task/update', data=dict(id=job_id, status='error', 
+                output = output))
+
+def main():
+    max_job = int(gcfg.slave.max_job)
+    sleep_duration = int(gcfg.slave.check_duration)
+
+    for i in range(max_job):
+        t = threading.Thread(target=job_manager, name='job%d'%i)
+        t.setDaemon(True)
+        t.start()
+
+    while True:
+        if que.qsize() > 2:
+            print 'Too many jobs, check after %s' %(naturaldelta(sleep_duration))
+            time.sleep(sleep_duration)
+            continue
+        try:
+            print 'Request new job'
             r = rpost('/task/apply')
             job_id = r.get('job_id')
             if not isinstance(job_id, int):
@@ -157,10 +186,14 @@ def main():
             if job_id:
                 reponame = r.get('reponame')
                 tag = r.get('tag')
-                
-                docker_build(job_id, reponame, tag)
+                print 'Got new job: %s %s %s' %(job_id, reponame, tag)
+                que.put((job_id, reponame, tag))
+                time.sleep(0.5)
             else:
-                sys.stdout.write('%s idle\n' % time.strftime("[%Y-%m-%d %H:%M:%S]"))
+                sys.stdout.write('%s Idle %s\n' % (
+                    time.strftime("[%Y-%m-%d %H:%M:%S]"), 
+                    naturaldelta(sleep_duration)))
+                time.sleep(sleep_duration)
         except Exception as e:
             traceback.print_exc()
             print 'exception:', e
