@@ -48,21 +48,20 @@ def build(goos, goarch, env={}):
     logname = 'build-%s-%s.log' %(goos, goarch)
     outfd = open(pathjoin(OUTDIR, logname), 'w')
 
-    print 'bash$ CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), 'go build'
-    ret = sh.go.build(_env=env, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
+    basename = os.path.basename(reponame)
+    ext = 'zip' if goos != 'linux' else 'tar.gz'
+    outname = '%s-%s-%s.%s' %(basename, goos, goarch, ext)
+
+    print 'bash$ CGO_ENABLED=1 GOOS=%s GOARCH=%s CC=%s'%(goos, goarch, CC.get(osarch,'')), './packer --debug -o %s' % outname
+    ret = packer('--debug', '-o', outname, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
+    #ret = sh.go.build(_env=env, _err_to_out=True, _out=outfd, _tee=True, _ok_code=range(255))
     if ret.exit_code != 0:
         print 'Bulid error on(%s/%s), exit_code(%d)' %(goos, goarch, ret.exit_code)
         print '------------\n'+str(ret)
         return False
 
-    binname = os.path.basename(reponame)
-    ext = 'zip' if goos != 'linux' else 'tar.gz'
-    outname = '%s-%s-%s.%s' %(binname, goos, goarch, ext)
-    if goos == 'windows':
-        binname += '.exe'
-
     outpath = pathjoin(OUTDIR, outname)
-    packer('--nobuild', '-a', binname, '-o', outpath, _err_to_out=True)
+    #packer( '-a', binname, '-o', outpath, _err_to_out=True)
     info = outjson['files'][osarch]={}
     info['size'] = os.path.getsize(outpath)
     info['md5'] = hashsum('md5', outpath)
@@ -75,8 +74,8 @@ def build(goos, goarch, env={}):
 def fetch(reponame, tag):
     print 'bash$ gopm --strict get -v -d %s@%s' %(reponame, tag)
     sh.gopm('--strict', 'get', '-v', '-d', reponame+'@'+tag, _err_to_out=True, _out=sys.stdout)
-    print 'bash$ go get -v %s' %(reponame)
-    sh.go.get('-v', reponame, _err_to_out=True, _out=sys.stdout)
+    print 'bash$ go get -v -d %s' %(reponame)
+    sh.go.get('-v', '-d', reponame, _err_to_out=True, _out=sys.stdout)
 
 def main():
     parser = argparse.ArgumentParser(description='cross compile build for golang')
