@@ -57,8 +57,8 @@ Default values:
 
 * settings.bulid.action --- gobuild
 * settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` auto when build for windows
-* filesets.includes --- ["README.md", "LICENSE"]
-* filesets.excludes --- ["\.git"]
+* filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
+* filesets.excludes --- ["\.git", `".*\\.go"`]
 other setting default empty.
 
 ## LINCENSE

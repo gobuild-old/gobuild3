@@ -28,8 +28,8 @@ var DefaultPcfg *PackageConfig
 func init() {
 	pcfg := &PackageConfig{}
 	pcfg.Author = ""
-	pcfg.Filesets.Includes = []string{"README.md", "LICENSE"}
-	pcfg.Filesets.Excludes = []string{"\\.git"}
+	pcfg.Filesets.Includes = []string{"README.md", "LICENSE", "conf", "static", "views"}
+	pcfg.Filesets.Excludes = []string{"\\.git", ".*\\.go"}
 	pcfg.Settings.TargetDir = ""
 	pcfg.Settings.Build = "go install -v"
 	DefaultPcfg = pcfg
