@@ -1,7 +1,9 @@
 FROM	karalabe/xgo-latest
 MAINTAINER codeskyblue@gmail.com
 
+RUN apt-get update
 RUN apt-get install -y python-pip
+RUN apt-get install -y bzr
 
 ADD requirements.txt /
 RUN pip install -r requirements.txt
