@@ -74,7 +74,7 @@
 					<h4>Tags</h4>
 					<div class="list-group">
 						{% for build in builds %}
-							<a href="/repo/{{repo.name}}?tag={{build.tag}}"
+							<a href="/{{repo.name}}?tag={{build.tag}}"
 								class="list-group-item
 								{%if not build.downloadable%}
 								disabled

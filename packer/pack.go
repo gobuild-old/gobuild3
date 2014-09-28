@@ -157,7 +157,9 @@ func Action(c *cli.Context) {
 		defer os.Remove(symdir)
 		// opts := []string{"install", "-v"}
 		// opts = append(opts, strings.Fields(pcfg.Settings.Addopts)...) // TODO: here need to use shell args parse lib
-		println(pcfg.Settings.Build)
+		if pcfg.Settings.Build == "" {
+			pcfg.Settings.Build = "go install -v"
+		}
 		if err = sess.Command("bash", "-c", pcfg.Settings.Build).Run(); err != nil {
 			// if err = sess.Command("go", opts).Run(); err != nil {
 			return
