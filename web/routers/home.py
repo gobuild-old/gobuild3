@@ -32,7 +32,9 @@ def checkrepo(name):
     r = requests.get('https://gowalker.org/api/v1/pkginfo', params=payload)
     d = r.json()
     if not d['id']:
-        raise Exception('error load package in https://gowalker.org: %s' % r.text)
+        raise Exception('Error load package in \
+                <a href="https://gowalker.org/{name}">https://gowalker.org/{name}</a>'.format(
+                    name=name))
 
     if not d['cmd']:
         raise Exception('Repo: [%s] is a go-lib, this platform only support main package' % name)
@@ -42,18 +44,27 @@ def checkrepo(name):
 @models.db_session
 def home():
     address = flask.request.args.get('address')
+    nocheck = (flask.request.args.get('force') == 'true')
     if address:
         reponame = cleanname(address)
         if not models.Repo.get(name=reponame):
             try:
-                nocheck = 'nocheck-'
-                if reponame.startswith(nocheck):
-                    reponame = reponame[len(nocheck):]
-                    desc = 'unknown desc'
+                if nocheck:
+                    if flask.request.args.get('reponame') != address:
+                        return flask.render_template('index.html', error='reponame not match')
+
+                    desc = 'unknown desc - forceadd'
                 else:
                     desc = checkrepo(reponame)
             except Exception as e:
-                force_add = '''If you confirm this is a go main package. Click <a class="btn btn-warning btn-xs" href="/?address=nocheck-%s">force add</a>''' %(reponame)
+                force_add = '''
+                If you confirm this is a go main package. 
+                <form class="pull-right">
+                    <input type="hidden" name="address" value="{reponame}">
+                    <input type="hidden" name="force" value="true">
+                    <input type="text" name="reponame" placeholder="Type repo name again">
+                    <button class="btn btn-warning btn-xs">force add</button>
+                </form>'''.format(reponame=reponame)
                 error = str(e) + ' <br>- ' + force_add
                 return flask.render_template('index.html', error=flask.Markup(error))
             repo = models.Repo(name=reponame)
