@@ -66,14 +66,15 @@ class Timer(db.Entity):
     created = Optional(date)
     count = Optional(int, default=1)
 
-db.bind('sqlite', './test_db.sqlite', create_db=True)
-'''
-db.bind(gcfg.db.dbtype, 
+if gcfg.db.dbtype == 'sqlite':
+    db.bind('sqlite', './test_db.sqlite', create_db=True)
+else:
+    db.bind(gcfg.db.dbtype, 
         host=gcfg.db.host, 
         user=gcfg.db.username, 
         passwd=gcfg.db.password, 
         db=gcfg.db.dbname)
-        '''
+
 db.generate_mapping(create_tables=True)
 
 if __name__ == '__main__':

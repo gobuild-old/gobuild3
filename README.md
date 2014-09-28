@@ -1,8 +1,6 @@
-## Still developing
-
 ## Beta version released
 
-<http://beta.gobuild.io>
+<http://gobuild.io>
 
 ## Description
 This repo is for website `gobuild.io`. Offer service that can easy build **golang** source code.
