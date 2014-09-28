@@ -86,7 +86,8 @@ def home():
     top = models.select(r for r in models.Repo).\
             order_by(models.desc(models.Repo.down_count))[:10]
 
-    error = 'Beta version, only for test for the time now.'
+    #error = 'Beta version, only for test for the time now.'
+    error=None
     return flask.render_template('index.html', top_repos=top, new_repos=new, error=error)
 
 @bp.route('/<path:reponame>')
@@ -113,6 +114,15 @@ def repo(reponame):
 def badge(whatever):
     return flask.send_from_directory('static/images', 'badge.svg')
 
+#
+# compatible with v1.gobuild
+#
 @bp.route('/download/<path:reponame>')
 def download(reponame):
     return redirect('/'+reponame)
+
+@bp.route('/<path:reponame>/<tag>/linux/<arch>')
+@bp.route('/<path:reponame>/<tag>/windows/<arch>')
+@bp.route('/<path:reponame>/<tag>/darwin/<arch>')
+def v1_link(reponame, tag, arch):
+    return redirect('http://v1.gobuild.io/'+flask.request.path)

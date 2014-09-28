@@ -1,8 +1,8 @@
 {% extends "repo.html" %}
 	{% block info %}
 		<div class="container row">
-			<a class="btn btn-info btn-xs" href="/task/list/{{job.build.id}}">&lt; back task list</a>
-			<a class="btn btn-info btn-xs" href="/repo/{{repo.name}}">&lt; back download</a>
+			<a class="btn btn-info btn-xs" href="/task/list/{{job.build.id}}">&lt; back to task list</a>
+			<a class="btn btn-info btn-xs" href="/repo/{{repo.name}}">&lt; back to download page</a>
 			<div>
 				<table class="table">
 					<tr>
@@ -26,7 +26,7 @@
 						<td>{{job.updated|strftime}}</td>
 					</tr>
 					<tr>
-						<th>Gobuildrc:</th>
+						<th>Config:</th>
 						<td><pre>{{job.gobuildrc}}</pre></td>
 					</tr>
 					<tr>

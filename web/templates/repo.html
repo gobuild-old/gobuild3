@@ -18,7 +18,7 @@
 					<!--<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>-->
 					<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/GoWalker-Doc-blue.svg?style=flat"></a>
 					<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/Source-github-blue.svg?style=flat"></a>
-					<a href="http://beta.gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>
+					<a href="http://gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>
 					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
 					<!-- Button trigger modal -->
 					<button class="btn btn-link btn-sm" data-toggle="modal" data-target="#myModal">
@@ -34,18 +34,18 @@
 									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 									<h4 class="modal-title" id="myModalLabel">
 										Badge of gobuild
-										<a href="http://beta.gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>
+										<a href="http://gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>
 									</h4>
 								</div>
 								<div class="modal-body">
 									<form role="form">
 									<div class="form-group">
 										<label>HTML</label>
-										<input class="click-select form-control" type="text" value='<a href="http://beta.gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>'>
+										<input class="click-select form-control" type="text" value='<a href="http://gobuild.io/{{repo.name}}"><img src="https://img.shields.io/badge/Gobuild-download-green.svg?style=flat"></a>'>
 									</div>
 									<div class="form-group">
 										<label>Markdown</label>
-										<input class="click-select form-control" type="text" value='[![Gobuild Download](https://img.shields.io/badge/Gobuild-download-green.svg?style=flat)](http://beta.gobuild.io/{{repo.name}})'>
+										<input class="click-select form-control" type="text" value='[![Gobuild Download](https://img.shields.io/badge/Gobuild-download-green.svg?style=flat)](http://gobuild.io/{{repo.name}})'>
 									</div>
 								</form>
 								</div>
@@ -74,7 +74,7 @@
 					<h4>Tags</h4>
 					<div class="list-group">
 						{% for build in builds %}
-							<a href="/repo/{{repo.name}}?tag={{build.tag}}"
+							<a href="/{{repo.name}}?tag={{build.tag}}"
 								class="list-group-item
 								{%if not build.downloadable%}
 								disabled
@@ -140,6 +140,8 @@
 									<strong>Build Status:</strong> {{build.status}}
 									</p>
 								{% endif %}
+							{% else %}
+							<p>No history build, you are first here, click <strong>Build Now</strong> to start.
 							{% endif %}
 						</div>
 					</div>
