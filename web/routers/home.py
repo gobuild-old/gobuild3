@@ -7,6 +7,7 @@ import requests
 from flask import request, flash, redirect, url_for, render_template
 
 import models
+import taskqueue
 
 bp = flask.Blueprint('home', __name__)
 
@@ -71,7 +72,12 @@ def home():
             repo.created = datetime.datetime.today()
             repo.description = desc
             repo.author = 'unknown .. unfinished'
+
+            # add new job
+            build = models.Build(repo=repo, tag='branch:master', status='initing')
+            job = models.Job(build=build, status='initing', created=datetime.datetime.today())
             models.commit()
+            taskqueue.que.put(job.id)
 
         return flask.redirect('/'+reponame, 302)
 
