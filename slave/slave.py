@@ -64,10 +64,14 @@ def upload_file(key, filename):
         raise Exception(err)
     return r.get('outlink')
 
+def job_workspace(job_id):
+    workspace = os.path.join(os.getcwd(), 'data', str(job_id))
+    return workspace
+
 def docker_build(job_id, reponame, tag):
     print 'Handle', job_id, reponame, tag
 
-    workspace = os.path.join(os.getcwd(), 'data', str(job_id))
+    workspace = job_workspace(job_id)
     if not os.path.exists(workspace):
         os.makedirs(workspace)
 
@@ -160,6 +164,9 @@ def job_manager():
             output = traceback.format_exc()
             rpost('/task/update', data=dict(id=job_id, status='error', 
                 output = output))
+        workspace = job_workspace(job_id)
+        assert workspace != '/' and workspace != '/home'
+        sh.rm('-fr', workspace)
 
 def main():
     max_job = int(gcfg.slave.max_job)
