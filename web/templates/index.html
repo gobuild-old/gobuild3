@@ -20,7 +20,8 @@
 				</tr>
 				{% for repo in top_repos %}
 					<tr class="{%if not repo.updated%}danger{%endif%}">
-						<td><a href="/repo/{{repo.name}}">{{repo.name[:50]}}</a></td>
+						<td><a data-toggle="tooltip" data-placement="top" title="{{repo.description}}"
+								href="/repo/{{repo.name}}">{{repo.name[:50]}}</a></td>
 						<td>{{repo.updated|naturaltime}}</td>
 						<td>{{repo.down_count}}</td>
 					</tr>
@@ -37,7 +38,8 @@
 				</tr>
 				{% for repo in new_repos %}
 					<tr class="{%if not repo.updated%}danger{%endif%}">
-						<td><a href="/repo/{{repo.name}}">{{repo.name[:50]}}</a></td>
+						<td><a data-toggle="tooltip" data-placement="top" title="{{repo.description}}"
+								href="/repo/{{repo.name}}">{{repo.name[:50]}}</a></td>
 						<td>{{repo.created|naturaltime}}</td>
 						<td>{{repo.down_count}}</td>
 					</tr>

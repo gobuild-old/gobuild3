@@ -90,19 +90,7 @@ func Action(c *cli.Context) {
 	if err != nil {
 		return
 	}
-	// var pcfg = new(config.PackageConfig)
-	// if sh.Test("file", config.RCFILE) {
-	// 	data, er := ioutil.ReadFile(config.RCFILE)
-	// 	if er != nil {
-	// 		err = er
-	// 		return
-	// 	}
-	// 	if err = goyaml.Unmarshal(data, pcfg); err != nil {
-	// 		return
-	// 	}
-	// } else {
-	// 	pcfg = config.DefaultPcfg
-	// }
+
 	pwd, _ := os.Getwd()
 	gobin := filepath.Join(pwd, sanitizedName(pcfg.Settings.TargetDir))
 	sess.SetEnv("GOBIN", gobin)
@@ -119,7 +107,7 @@ func Action(c *cli.Context) {
 		needs = append(needs, regexp.MustCompile("^"+str+"$"))
 	}
 
-	log.Infof("archive file to: %s", output)
+	//log.Infof("archive file to: %s", output)
 	var z Archiver
 	hasExt := func(ext string) bool { return strings.HasSuffix(output, ext) }
 	switch {
@@ -158,7 +146,7 @@ func Action(c *cli.Context) {
 		// opts := []string{"install", "-v"}
 		// opts = append(opts, strings.Fields(pcfg.Settings.Addopts)...) // TODO: here need to use shell args parse lib
 		if pcfg.Settings.Build == "" {
-			pcfg.Settings.Build = "go install -v"
+			pcfg.Settings.Build = DEFAULT_BUILD
 		}
 		if err = sess.Command("bash", "-c", pcfg.Settings.Build).Run(); err != nil {
 			// if err = sess.Command("go", opts).Run(); err != nil {
