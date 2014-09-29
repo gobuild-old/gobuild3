@@ -25,13 +25,15 @@ const RCFILE = ".gobuild.yml"
 
 var DefaultPcfg *PackageConfig
 
+const DEFAULT_BUILD = "test -d Godeps && alias go='godep go'; go install -v"
+
 func init() {
 	pcfg := &PackageConfig{}
 	pcfg.Author = ""
 	pcfg.Filesets.Includes = []string{"README.md", "LICENSE", "conf", "static", "views"}
 	pcfg.Filesets.Excludes = []string{"\\.git", ".*\\.go"}
 	pcfg.Settings.TargetDir = ""
-	pcfg.Settings.Build = "go install -v"
+	pcfg.Settings.Build = DEFAULT_BUILD
 	DefaultPcfg = pcfg
 }
 
