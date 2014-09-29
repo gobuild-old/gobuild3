@@ -35,7 +35,7 @@ filesets:
 settings:
         targetdir: ""
         build: |
-            test -d Godeps && alias go='godep go'; go install -v
+			test -d Godeps && go(){ godep go "$@";} ; go install -v
         outfiles:
             - packer
 ```
@@ -54,11 +54,12 @@ settings.targetdir will set to env GOBIN, which will make sure `go install` inst
 
 Default values:
 
-* settings.bulid --- "test -d Godeps && alias go='godep go'; go install -v"
+* settings.bulid --- "test -d Godeps && go(){ godep go "$@";} ; go install -v"
 * settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` auto when build for windows
 * filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
 * filesets.excludes --- ["\.git", `".*\\.go"`]
 other setting default empty.
 
+alias not support in `bash -c`, I really don't know why.
 ## LINCENSE
 This repo use MIT LINCENSE

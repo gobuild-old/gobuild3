@@ -25,7 +25,7 @@ const RCFILE = ".gobuild.yml"
 
 var DefaultPcfg *PackageConfig
 
-const DEFAULT_BUILD = "test -d Godeps && alias go='godep go'; go install -v"
+const DEFAULT_BUILD = `test -d Godeps && go(){ godep go "$@";} ; go install -v`
 
 func init() {
 	pcfg := &PackageConfig{}
