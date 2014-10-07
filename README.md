@@ -3,23 +3,22 @@
 <http://gobuild.io>
 
 ## Description
-This repo is for website `gobuild.io`. Offer service that can easy build **golang** source code.
+This repo is for the website `gobuild.io`, which offers a service that can easily build **golang** source code.
 
-Commit your repo address to gobuild.io, it will do cross compile for you. 
-After a while, download link will generated.
+Commit your repo address to gobuild.io and it will cross-compile for you and generate a download link.
 
-Now the web support the following features.
+Currently the site supports the following features:
 
-* platform support linux,amd64-386-arm/windows,amd64-386/darwin,amd64-386
+* Platform support for linux, amd64-386-arm/windows, amd64-386/darwin and amd64-386
 * CGO support
-* Support build specify branch, tag, or sha
-* Rank the most download repos and latest repos.
-* Support `.gobuild.yml` file to custom build actions
+* Builds specified by branch, tag, or sha
+* Rank the most downloaded and latest repos
+* Custom build actions with `.gobuild.yml` files
 * [godep](https://github.com/tools/godep) support
 
-## .gobulid.yml format
+## .gobuild.yml format
 
-```
+```yaml
 author: codeskyblue@gmail.com
 description: >
         Hmm. this is a test.
@@ -39,27 +38,28 @@ settings:
         outfiles:
             - packer
 ```
-This is a full version of `.gobuild.yml`, this file should commit the your repo with directory which contains go source code.
+This is a full version of `.gobuild.yml`. This file should be committed to your repo with a directory containing go source code.
 
-Only filesets.excludes use regex to filter file, the filesets.include not use regex, please do remember.
-(If you got any idea to let includes support regex, pull requests are welcome.)
+Only `filesets.excludes` uses regex to filter files. Note that `filesets.includes` does *not* use regex.
+(If you have any idea how includes could support regex, pull requests are welcome.)
 
 Use `packer` to check if `.gobuild.yml` is right.
 
 	go get github.com/gobuild/gobuild3/packer
 
-`packer --init` can also generate sample `.gobuild.yml`
+`packer --init` can also generate a sample `.gobuild.yml`
 
-settings.targetdir will set to env GOBIN, which will make sure `go install` install to the right dir.
+`settings.targetdir` will set the env `GOBIN`, which will make sure `go install` installs to the right directory.
 
-Default values:
+**Default values**:
 
-* settings.bulid --- "test -d Godeps && go(){ godep go "$@";} ; go install -v"
-* settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` auto when build for windows
+* settings.build --- "test -d Godeps && go(){ godep go "$@";} ; go install -v"
+* settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` automatically when building for windows
 * filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
-* filesets.excludes --- ["\.git", `".*\\.go"`]
-other setting default empty.
+* filesets.excludes --- ["\.git", ".*\\.go"]
+other settings default to empty.
 
-alias not support in `bash -c`, I really don't know why.
-## LINCENSE
-This repo use MIT LINCENSE
+alias is not supported for `bash -c` -- I really don't know why.
+
+## LICENSE
+This repo is covered by the MIT LICENSE
