@@ -3,7 +3,7 @@
 <http://gobuild.io>
 
 ## Description
-This repo is for the website `gobuild.io`, which offers a service that can easy build **golang** source code.
+This repo is for the website `gobuild.io`, which offers a service that can easily build **golang** source code.
 
 Commit your repo address to gobuild.io and it will cross-compile for you and generate a download link.
 
@@ -56,10 +56,10 @@ Use `packer` to check if `.gobuild.yml` is right.
 * settings.build --- "test -d Godeps && go(){ godep go "$@";} ; go install -v"
 * settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` automatically when building for windows
 * filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
-* filesets.excludes --- ["\.git", `".*\\.go"`]
+* filesets.excludes --- ["\.git", ".*\\.go"]
 other settings default to empty.
 
-alias is not supporteded for `bash -c` -- I really don't know why.
+alias is not supported for `bash -c` -- I really don't know why.
 
 ## LICENSE
 This repo is covered by the MIT LICENSE
