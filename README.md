@@ -40,26 +40,26 @@ settings:
 ```
 This is a full version of `.gobuild.yml`. This file should be committed to your repo with a directory containing go source code.
 
-Only `filesets.excludes` uses regex to filter file. Note that `filesets.includes` does *not* use regex.
+Only `filesets.excludes` uses regex to filter files. Note that `filesets.includes` does *not* use regex.
 (If you have any idea how includes could support regex, pull requests are welcome.)
 
 Use `packer` to check if `.gobuild.yml` is right.
 
 	go get github.com/gobuild/gobuild3/packer
 
-`packer --init` can also generate sample `.gobuild.yml`
+`packer --init` can also generate a sample `.gobuild.yml`
 
-`settings.targetdir` will set to env `GOBIN`, which will make sure `go install` installs to the right directory.
+`settings.targetdir` will set the env `GOBIN`, which will make sure `go install` installs to the right directory.
 
 **Default values**:
 
 * settings.build --- "test -d Godeps && go(){ godep go "$@";} ; go install -v"
-* settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` auto when build for windows
+* settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` automatically when building for windows
 * filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
 * filesets.excludes --- ["\.git", `".*\\.go"`]
 other settings default to empty.
 
-alias not supported in `bash -c`, I really don't know why.
+alias is not supporteded for `bash -c` -- I really don't know why.
 
 ## LICENSE
 This repo is covered by the MIT LICENSE
