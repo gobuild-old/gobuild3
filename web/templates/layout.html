@@ -94,13 +94,15 @@
         </div>
       </div>
     {% endif %}
-    <div id="content" class="container">{% block body %}{% endblock %}</div>
-    <div id="footer" class="container">
-      {% block footer %}
-        <p class="text-right">
-        &copy; Copyright 2014 by <a href="http://github.com/codeskyblue">codeskyblue</a>
-        </p>
-      {% endblock %}
+    <div class="container">
+	    <div id="content">{% block body %}{% endblock %}</div>
+	    <div id="footer">
+	      {% block footer %}
+		<p class="text-right">
+		&copy; Copyright 2014 by <a href="http://github.com/codeskyblue">codeskyblue</a>
+		</p>
+	      {% endblock %}
+	    </div>
     </div>
     <!-- tongji -->
     <script>
