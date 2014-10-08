@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}{{repo.name|basename}}{%endblock%}
+    {% block head_extra %}
+		<script type="text/javascript" src="/static/js/ZeroClipboard.min.js"></script>
+		<script type="text/javascript" src="http://notifyjs.com/dist/notify-combined.min.js"></script>
+	{% endblock %}
 	{% block body %}
 		{% block repohead %}
 			<div class="container row">
@@ -123,12 +127,10 @@
 														{% endfor %}
 													</td>
 													<td style="width: 40%">
-														<div class="input-group">
-															<input type="text" class="form-control" value="curl xxx">
-															<span class="input-group-btn">
-															<button class="btn btn-default" type="button">copy</button>
-															</span>
-														</div>
+														<span class="input-group-btn">
+															<button class="btn btn-default copy-button" prefix="curl -LO" platform="{{goos}}" type="button">curl</button>
+															<button class="btn btn-default copy-button" prefix="wget" platform="{{goos}}" type="button">wget</button>
+														</span>
 													</td>
 												</tr>
 											{% endfor %}
@@ -153,14 +155,13 @@
 					e.initEvent( 'click', true, true );
 					a.dispatchEvent(e);
 				}
-				$(".download").click(function(e){
-						var goos = $(this).attr("platform")
-						var xpath = "input[name="+goos+"-arch]:checked";
-						var arch = $(xpath).val();
-						$.get('/repo/retrive', {
-							reponame:"{{repo.name}}", goos: goos, goarch: arch,
-							tag: "{{active_tag}}",
-						}, function(d){
+				var retrive = function(goos, goarch, async, on_success) {
+					var setting = {
+						url: '/repo/retrive',
+						type: 'GET',
+						async: async, 
+						data: {reponame:"{{repo.name}}", goos: goos, goarch: goarch, tag: "{{active_tag}}"},
+						success: function(d){
 							console.log("message", d.message);
 							var well;
 							if (d.status !== 0){
@@ -170,13 +171,41 @@
 							}
 							well = well.replace(new RegExp('\n','g'), '<br>');
 							$("#well").html(well);
+							on_success(d);
+						}
+					};
+					$.ajax(setting);
+				}
+				$(".download").click(function(e){
+						var goos = $(this).attr("platform")
+						var xpath = "input[name="+goos+"-arch]:checked";
+						var arch = $(xpath).val();
+						retrive(goos, arch, false, function(d){
 							if (d.status === 0){
+								$("#well").prepend('<i>download will start soon.</i> '+
+									'if not started click <a href="{0}">link</a><br>'.format(d.outlink));
 								saveas(d.outlink);
 							}
 						});
-						//a.close();
-						//console.log(goos+arch);
 				});
+				var zclient = new ZeroClipboard($(".copy-button"));
+				zclient.on("copy", function(event){
+						var $this = $(event.target);
+						var goos = $this.attr("platform")
+						var xpath = "input[name="+goos+"-arch]:checked";
+						var arch = $(xpath).val();
+						var tag = "{{active_tag}}"
+						var clipboard = event.clipboardData;
+						retrive(goos, arch, false, function(d){
+							var prefix = $this.attr("prefix") || "";
+							var suffix = $this.attr("suffix") || "";
+							var copydata = prefix + " " + d.outlink + " " + suffix;
+							clipboard.setData("text/plain", copydata);
+							$this.parent("span").notify("copied to clipboard", 
+								{position: "top", className: 'success', autoHideDelay: 1000});
+							$("#well").prepend("<code>"+copydata+"</code><br>");
+						});
+				})
 				</script>
 			{% endblock %}
 			{% block disqus %}
