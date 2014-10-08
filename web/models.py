@@ -22,6 +22,16 @@ class Repo(db.Entity):
     down_count = Optional(int, default=0)
     builds = Set("Build")
 
+class Category(db.Entity):
+    name = Required(unicode, unique=True)
+
+class Recommend(db.Entity):
+    repo = Optional(Repo)
+    name = Optional(unicode)
+    created = Optional(datetime)
+    updated = Optional(datetime)
+    checked = Optional(bool, default=False)
+
 class Build(db.Entity):
     repo = Optional(Repo)
     downloadable = Optional(bool, default=False)
