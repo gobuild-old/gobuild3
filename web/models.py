@@ -9,7 +9,7 @@ from pony.orm import *
 
 import gcfg
 
-#sql_debug(True)
+sql_debug(True)
 db = Database()
 
 class Repo(db.Entity):
@@ -18,12 +18,24 @@ class Repo(db.Entity):
     description = Optional(str)
     created = Optional(datetime)
     updated = Optional(datetime)
-    view_count = Optional(int, default=0)
-    down_count = Optional(int, default=0)
+    view_count = Optional(int, default=0) # goint to replace by ammount soon.
+    down_count = Optional(int, default=0) # so is it.
+    ammount = Set("Ammount") # new add
+
     builds = Set("Build")
 
-class Category(db.Entity):
-    name = Required(unicode, unique=True)
+    # github-api: https://developer.github.com/v3/repos/#get
+    readme = Optional(LongStr) # markdown format
+    stars = Optional(int, default=0) # get from github
+    offcial = Optional(bool, default=False)
+    alias = Optional(unicode)
+    recommend = Optional("Recommend")
+
+class Ammount(db.Entity):
+    repo = Required(Repo)
+    name = Required(unicode)
+    count = Optional(int, default=0)
+    composite_key(name, repo)
 
 class Recommend(db.Entity):
     repo = Optional(Repo)
@@ -31,12 +43,19 @@ class Recommend(db.Entity):
     created = Optional(datetime)
     updated = Optional(datetime)
     checked = Optional(bool, default=False)
+    uuid = Optional(unicode)
+    category = Optional("Category")
+
+class Category(db.Entity):
+    name = Required(unicode, unique=True)
+    recommends = Set(Recommend)
 
 class Build(db.Entity):
     repo = Optional(Repo)
-    downloadable = Optional(bool, default=False)
     tag = Optional(unicode)
+    
     sha = Optional(unicode)
+    downloadable = Optional(bool, default=False)
     updated = Optional(datetime)
     down_count = Optional(int, default=0)
     files = Set("File")
@@ -87,8 +106,20 @@ else:
 
 db.generate_mapping(create_tables=True)
 
+@db_session
+def repocount(repo, _type, addcnt=0):
+    ''' repo download count(got,down,or other) '''
+    am = Ammount.get(repo=repo, name=_type) \
+            or Ammount(repo=repo, name=_type)
+    am.count += addcnt
+    return am.count
+
+
 if __name__ == '__main__':
     with db_session:
+        print 'start add new repo'
+        print repocount(1, 'got', 2)
+
         repo = Repo(name='github.com/gobuild/got')
         repo.author = 'lunny'
         repo.description = 'this is sample repo'
@@ -117,6 +148,7 @@ if __name__ == '__main__':
         file.sha = 'sssshhhhsej23423467890'
         file.size = 1025
 
+        print 'add new build'
         build = Build(repo=repo)
         build.tag = 'tag:v1.0.2'
         build.sha = 'ssssslkjfaefr3134j2l3krj'
@@ -127,31 +159,3 @@ if __name__ == '__main__':
         build.status = 'build error'
         build.osarchs = '[["windows", ["amd64", "arm"]], ["linux", ["amd64"]]]'
 
-@db_session
-def add_record(phoneno, jsondata):
-    ''' True or False '''
-    phone = Phone.get(number=phoneno)
-    if not phone:
-        return False
-    args = dict(phone=phone,
-            created = datetime.fromtimestamp(time.time()),
-            data = json.dumps(jsondata))
-    JobRecord(**args)
-    return True
-
-@db_session
-def get_latest_record(devno, strdatetime):
-    ''' None or data '''
-    stamp = time.mktime(time.strptime(strdatetime, '%Y-%m-%d'))
-    start_time = datetime.fromtimestamp(stamp)
-    to_time = start_time + timedelta(days=1)
-    latest = select(p for p in JobRecord if p.created > start_time and 
-            p.created < to_time and p.phone.number == devno).order_by(desc(JobRecord.created))[:1]
-    if not latest:
-        return None
-    latest = latest[0]
-    return dict(phoneno=latest.phone.number, created=latest.created, data=json.loads(latest.data))
-
-@db_session
-def get_timers(email):
-    return select(t for t in Timer if t.email == email)[:]
