@@ -9,7 +9,7 @@ from pony.orm import *
 
 import gcfg
 
-sql_debug(True)
+#sql_debug(True)
 db = Database()
 
 class Repo(db.Entity):
@@ -28,7 +28,7 @@ class Repo(db.Entity):
     readme = Optional(LongStr) # markdown format
     stars = Optional(int, default=0) # get from github
     offcial = Optional(bool, default=False)
-    alias = Optional(unicode)
+    #alias = Optional(unicode) # same in Recommend.alias
     recommend = Optional("Recommend")
 
 class Ammount(db.Entity):
