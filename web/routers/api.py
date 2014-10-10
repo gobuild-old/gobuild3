@@ -20,8 +20,8 @@ def home():
 @bp.route('/v1/repolist')
 @models.db_session
 def repolist():
-    goos='windows'
-    goarch='amd64'
+    goos=request.args.get('os', 'windows')
+    goarch=request.args.get('arch', 'amd64')
     data = []
     for r in models.select(r for r in models.Recommend)[:]:
         item = dict(
@@ -32,7 +32,6 @@ def repolist():
             offical=r.repo.offcial,
             category=r.category.name if r.category else None,
             stars=r.repo.stars,
-            osarch=goos+'-'+goarch,
             )
         files = []
         for b in r.repo.builds:
@@ -50,7 +49,7 @@ def repolist():
             item['files'] = files
             data.append(item)
 
-    data.append(dict(
+    dict(
         reponame = 'github.com/codeskyblue/cgotest',
         description='this is is just a test program',
         alias='cgotest', # this could be null
@@ -61,5 +60,5 @@ def repolist():
         files=[
             {'label': 'branch:master', 'url': 'http://gobuild3.qiniudn.com/github.com/gogits/gogs/branch-v-master/gogs-linux-386.tar.gz', 'binfiles': ['gogs'], 'sha1': '408eebced1c2cdbd363df2fe843831bf337d4273', 'size': 7000000},
             {'label': 'tag:v0.5.2', 'url': 'http://gobuild3.qiniudn.com/github.com/gogits/gogs/tag-v-v0.5.2/gogs-linux-386.tar.gz', 'binfiles': ['gogs'], 'sha1': '960e329d46ec7a79745cf3438eaf3c3151d38d97', 'size': 7100000}],
-        ))
-    return flask.jsonify({'status': 0, 'message': 'success', 'osarch': 'linux-386', 'data': data})
+        )
+    return flask.jsonify({'status': 0, 'message': 'success', 'osarch': goos+'-'+goarch, 'data': data})
