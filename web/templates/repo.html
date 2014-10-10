@@ -9,20 +9,21 @@
 			<div class="container row">
 				<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
 				<span style="font-size:20px">
-				<a href="/repo/{{repo.name}}"><strong>{{repo.name}}</strong></a>
-				<a href="https://{{repo.name}}" class="btn btn-info btn-xs">Source</a>
-				<br>
-				<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
-				<!--<a href="/repo/{{repo.name}}#disqus_thread">Link</a>-->
+					<strong>{{repo.name}}</strong>
+					<a style="padding-left:5px" href="https://{{repo.name}}"><img height=25px src="/static/images/github32px.png"></a>
+					<br>
+					<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
+					<!--<a href="/repo/{{repo.name}}#disqus_thread">Link</a>-->
 				</span>
 				<br>
 				<p>{{repo.description}}</p>
 				<div class="pull-left">
 					<!--<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>-->
 					<!--<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>-->
-					<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/GoWalker-Doc-blue.svg?style=flat"></a>
-					<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/source-github-blue.svg?style=flat"></a>
-					<a href="http://sourcegraph.com/{{repo.name}}"><img src="https://sourcegraph.com/api/repos/github.com/gobuild/got/.badges/status.png" alt="sourcegraph"></a>
+					<a href="https://gowalker.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-gowalker-blue.svg?style=flat"></a>
+					<a href="https://sourcegraph.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-sourcegraph-blue.svg?style=flat"></a>
+					<!--<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/source-github-blue.svg?style=flat"></a>-->
+					<!--<a href="http://sourcegraph.com/{{repo.name}}"><img src="https://sourcegraph.com/api/repos/github.com/gobuild/got/.badges/status.png" alt="sourcegraph"></a>-->
 					<img src="https://img.shields.io/badge/gobuild-download-green.svg?style=flat">
 					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
 					<!-- Button trigger modal -->
@@ -76,7 +77,7 @@
 		{% block info %}
 			<div class="container row" style="border: 0px solid gray">
 				<div class="col-md-4" style="padding: 10px 10px">
-					<h4>Tags</h4>
+					<h4>Labels</h4>
 					<div class="list-group">
 						{% for build in builds %}
 							<a href="/{{repo.name}}?tag={{build.tag}}"
