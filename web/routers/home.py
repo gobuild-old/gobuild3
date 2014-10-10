@@ -110,10 +110,6 @@ def repo(reponame):
             active_tag=active_tag, build=build, osarchs=osarchs)
     return render_template('repo.html', **kwargs)
 
-@bp.route('/badge/<path:whatever>')
-def badge(whatever):
-    return flask.send_from_directory('static/images', 'badge.svg')
-
 #
 # compatible with v1.gobuild
 #

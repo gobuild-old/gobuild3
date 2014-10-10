@@ -42,7 +42,7 @@ def register_routers():
     from routers import home
     app.register_blueprint(home.bp, url_prefix='')
 
-    for blueprint in 'home', 'repo', 'task', 'donate', 'storage', 'api':
+    for blueprint in 'home', 'repo', 'task', 'donate', 'storage', 'api', 'badge':
         exec 'from routers import %s' %(blueprint) 
         bp = eval(blueprint+'.bp')
         app.register_blueprint(bp, url_prefix='/'+blueprint)
