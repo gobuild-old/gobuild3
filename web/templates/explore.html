@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% if error %}
+		<p class=error><strong>Error:</strong> {{ error }}
+	{% endif %}
+	<h3>Explore Gobuild</h3>
+	<div class="row">
+		<div class="col-md-8">
+			<ul class="list-group">
+				{% for r in recommends %}
+				<li class="list-group-item">
+					<div class="pull-right">
+						<span class="glyphicon glyphicon-star"></span> {{r.repo.stars}}
+					</div>
+					<h4>
+						<a data-toggle="tooltip" data-placement="top"
+							title="ok"
+							href="/{{r.repo.name}}">{{r.repo.name}}</a>
+					</h4>
+					<p>{{r.repo.description}}</p>
+					<p><small>recommend by <i>{{r.author}}</i></small></p>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="col-md-4">
+			<h4>Related Showcases</h4>
+			<ul>
+			</ul>
+		</div>
+	</div>
+{% endblock %}

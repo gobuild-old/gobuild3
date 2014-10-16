@@ -40,6 +40,10 @@ class Ammount(db.Entity):
 class Recommend(db.Entity):
     repo = Optional(Repo)
     name = Optional(unicode)
+
+    reason = Optional(LongStr)
+    author = Optional(unicode)
+
     created = Optional(datetime)
     updated = Optional(datetime)
     checked = Optional(bool, default=False)

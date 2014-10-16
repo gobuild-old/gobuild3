@@ -6,58 +6,52 @@
 	{% endblock %}
 	{% block body %}
 		{% block repohead %}
-			<div class="container row">
-				<p class="pull-right">Updated {{repo.updated|naturaltime}}</p>
-				<span style="font-size:20px">
-					<strong>{{repo.name}}</strong>
+			<div class="row">
+				<div class="col-md-12">
+				<h3>
 					<a style="padding-left:5px" href="https://{{repo.name}}"><img height=25px src="/static/images/github32px.png"></a>
-					<br>
-					<span class="glyphicon glyphicon-cloud-download"></span> {{repo.down_count}}
-					<!--<a href="/repo/{{repo.name}}#disqus_thread">Link</a>-->
-				</span>
-				<br>
-				<p>{{repo.description}}</p>
+					<a href="/{{repo.name}}">{{repo.name}}</a>
+					<small>Updated {{repo.updated|naturaltime}}</small>
+				</h3>
+				<hr/>
+				<p>{{repo.description}} <a href="https://{{repo.name}}">source</a></p>
 				<div class="pull-left">
-					<!--<a href="https://godoc.org/{{repo.name}}"><img src="https://godoc.org/{{repo.name}}?status.svg" alt="GoDoc"></a>-->
-					<!--<a href="https://gowalker.org/{{repo.name}}"><img src="http://gowalker.org/api/v1/badge" alt="GoDoc"></a>-->
 					<a href="https://gowalker.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-gowalker-blue.svg?style=flat"></a>
 					<a href="https://sourcegraph.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-sourcegraph-blue.svg?style=flat"></a>
-					<!--<a href="https://{{repo.name}}"><img src="http://img.shields.io/badge/source-github-blue.svg?style=flat"></a>-->
-					<!--<a href="http://sourcegraph.com/{{repo.name}}"><img src="https://sourcegraph.com/api/repos/github.com/gobuild/got/.badges/status.png" alt="sourcegraph"></a>-->
-					<img src="/badge/{{repo.name}}/downloads.svg">
+					<span data-toggle="modal" data-target="#myModal">
+						<img data-toggle="tooltip" data-placement="top"
+							title="generate badge"
+							src="/badge/{{repo.name}}/downloads.svg"/>
+					</span>
 					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
-					<!-- Button trigger modal -->
-					<button class="btn btn-link btn-sm" data-toggle="modal" data-target="#myModal">
-					generate badge
-					</button>
+					<button class="btn btn-default btn-xs btn-info">hello</button>
+
 					<!-- Modal -->
 					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
-							
 								<div class="modal-content">
-
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-									<h4 class="modal-title" id="myModalLabel">
-										Badge of gobuild
-										<a href="http://gobuild.io/{{repo.name}}"><img src="/badge/{{repo.name}}/downloads.svg"></a>
-									</h4>
-								</div>
-								<div class="modal-body">
-									<form role="form">
-									<div class="form-group">
-										<label>HTML</label>
-										<input class="click-select form-control" type="text" value='<a href="http://gobuild.io/{{repo.name}}"><img src="http://gobuild.io/badge/{{repo.name}}/downloads.svg</a>'>
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+										<h4 class="modal-title" id="myModalLabel">
+											Badge of gobuild
+											<a href="http://gobuild.io/{{repo.name}}"><img src="/badge/{{repo.name}}/downloads.svg"></a>
+										</h4>
 									</div>
-									<div class="form-group">
-										<label>Markdown</label>
-										<input class="click-select form-control" type="text" value='[![Gobuild Download](http://gobuild.io/badge/{{repo.name}}/downloads.svg)](http://gobuild.io/{{repo.name}})'>
+									<div class="modal-body">
+										<form role="form">
+										<div class="form-group">
+											<label>HTML</label>
+											<input class="click-select form-control" type="text" value='<a href="http://gobuild.io/{{repo.name}}"><img src="http://gobuild.io/badge/{{repo.name}}/downloads.svg</a>'>
+										</div>
+										<div class="form-group">
+											<label>Markdown</label>
+											<input class="click-select form-control" type="text" value='[![Gobuild Download](http://gobuild.io/badge/{{repo.name}}/downloads.svg)](http://gobuild.io/{{repo.name}})'>
+										</div>
+										</form>
 									</div>
-								</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
 							</div>
 						</div>
 					</div>
@@ -73,10 +67,11 @@
 				</div>
 				<br>
 			</div>
+		</div>
 		{% endblock %}
 		{% block info %}
-			<div class="container row" style="border: 0px solid gray">
-				<div class="col-md-4" style="padding: 10px 10px">
+			<div class="row">
+				<div class="col-md-4">
 					<h4>Labels</h4>
 					<div class="list-group">
 						{% for build in builds %}

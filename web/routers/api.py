@@ -17,6 +17,11 @@ bp = flask.Blueprint('api', __name__)
 def home():
     return flask.render_template('api.html')
 
+@bp.route('/v1/recommend')
+@models.db_session
+def recommend():
+    return flask.jsonify(dict(status=0, message='success'))
+
 @bp.route('/v1/repolist')
 @models.db_session
 def repolist():

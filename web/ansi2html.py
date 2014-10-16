@@ -40,7 +40,7 @@ colorCodes = {
     4 : 'blue',
     5 : 'magenta',
     6 : 'cyan',
-    7 :    'white',
+    7 : 'white',
 }
 attribCodes = {
     1 : 'bright',
