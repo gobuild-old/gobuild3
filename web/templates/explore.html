@@ -10,9 +10,10 @@
 				{% for r in recommends %}
 				<li class="list-group-item">
 					<div class="pull-right">
-						<span class="glyphicon glyphicon-star"></span> {{r.repo.stars}}
+						<span class="glyphicon glyphicon-star"></span> {{r.repo.stars}} 
 					</div>
 					<h4>
+						[{{r.category.name}}]
 						<a href="/{{r.repo.name}}">{{r.repo.name}}</a>
 					</h4>
 					<p>{{r.repo.description}}</p>
