@@ -6,9 +6,15 @@
 	{% endblock %}
 	{% block body %}
 		{% block repohead %}
+			{% from 'modal.macro.html' import render_modal, modal_button %}
 			<div class="row">
 				<div class="col-md-12">
 				<h3>
+					{% call modal_button('recommend') %}
+						<button class="pull-right btn btn-default btn-xs btn-success">
+							Recomend this Project
+						</button>
+					{% endcall %}
 					<a style="padding-left:5px" href="https://{{repo.name}}"><img height=25px src="/static/images/github32px.png"></a>
 					<a href="/{{repo.name}}">{{repo.name}}</a>
 					<small>Updated {{repo.updated|naturaltime}}</small>
@@ -18,43 +24,56 @@
 				<div class="pull-left">
 					<a href="https://gowalker.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-gowalker-blue.svg?style=flat"></a>
 					<a href="https://sourcegraph.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-sourcegraph-blue.svg?style=flat"></a>
-					<span data-toggle="modal" data-target="#myModal">
+					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
+
+					{% call modal_button('badge', 'span') %}
 						<img data-toggle="tooltip" data-placement="top"
 							title="generate badge"
 							src="/badge/{{repo.name}}/downloads.svg"/>
-					</span>
-					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
-					<button class="btn btn-default btn-xs btn-info">hello</button>
+					{% endcall %}
 
-					<!-- Modal -->
-					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-										<h4 class="modal-title" id="myModalLabel">
-											Badge of gobuild
-											<a href="http://gobuild.io/{{repo.name}}"><img src="/badge/{{repo.name}}/downloads.svg"></a>
-										</h4>
-									</div>
-									<div class="modal-body">
-										<form role="form">
-										<div class="form-group">
-											<label>HTML</label>
-											<input class="click-select form-control" type="text" value='<a href="http://gobuild.io/{{repo.name}}"><img src="http://gobuild.io/badge/{{repo.name}}/downloads.svg</a>'>
-										</div>
-										<div class="form-group">
-											<label>Markdown</label>
-											<input class="click-select form-control" type="text" value='[![Gobuild Download](http://gobuild.io/badge/{{repo.name}}/downloads.svg)](http://gobuild.io/{{repo.name}})'>
-										</div>
-										</form>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									</div>
-							</div>
+					{% call render_modal('Badge of gobuild', 'badge') %}
+						<form role="form">
+						<div class="form-group">
+							<label>HTML</label>
+							<input class="click-select form-control" type="text" value='<a href="http://gobuild.io/{{repo.name}}"><img src="http://gobuild.io/badge/{{repo.name}}/downloads.svg</a>'>
 						</div>
-					</div>
+						<div class="form-group">
+							<label>Markdown</label>
+							<input class="click-select form-control" type="text" value='[![Gobuild Download](http://gobuild.io/badge/{{repo.name}}/downloads.svg)](http://gobuild.io/{{repo.name}})'>
+						</div>
+						<div>
+							<a href="http://gobuild.io/{{repo.name}}">
+								<img src="/badge/{{repo.name}}/downloads.svg">
+							</a>
+						</div>
+						</form>
+					{% endcall %}
+
+					{% call render_modal('Recommand '+repo.name, 'recommend', hidefooter="1") %}
+						<form id="form-recommend" role="form">
+							<div class="form-group">
+								<label>Email address</label>
+								<input class="form-control" name="email" type="text" 
+									required placeholder='Enter email'>
+							</div>
+							<div class="form-group">
+								<label>Reason</label>
+								<textarea placeholder='Why you think this repository is good?'
+									name='reason' class="form-control" rows="3" required></textarea>
+							</div>
+							<button class="btn btn-info" id="btn-recommend">Confirm</button>
+						</form>
+						<script src="/static/js/jquery.form.js"></script> 
+						<script>
+							$(function(){
+									$("#form-recommend").ajaxForm(function(){
+										alert("Thanks, you can close windows now");
+									});
+							});
+						</script>
+					{% endcall %}
+
 				</div>
 				<div class="pull-right" style="margin-bottom: 10px">
 					<form class="form-inline" role="form" action='/task/build'>
@@ -206,27 +225,6 @@
 				</script>
 			{% endblock %}
 			{% block disqus %}
-				<div id="disqus_thread"></div>
-				<script type="text/javascript">
-				/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-				var disqus_shortname = 'gobuild'; // required: replace example with your forum shortname
-				/* * * DON'T EDIT BELOW THIS LINE * * */
-				$(function(){
-				(function() {
-				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-				(document.getElementsByTagName('body')[0] || document.getElementsByTagName('head')[0]).appendChild(dsq);
-				})();
-				});
-					/* comment count */
-				(function () {
-					var s = document.createElement('script'); s.async = true;
-					s.type = 'text/javascript';
-					s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-					(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-				}());
-				</script>
-				<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-				<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				{% include "disqus.html" %}
 			{% endblock %}
 		{% endblock %}

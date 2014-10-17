@@ -1,0 +1,33 @@
+<!-- Modal -->
+{% macro modal_button(id, tag='span') %}
+	<{{tag}} data-toggle='modal' data-target='#{{id}}'>
+		{{ caller() }}
+	</{{tag}}>
+{% endmacro %}
+
+{% macro render_modal(title, id, role="dialog", hidefooter="0") %}
+	<div class="modal fade" id="{{id}}" tabindex="-1" role="{{role}}" 
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">
+						{{title}}
+					</h4>
+				</div>
+				<div class="modal-body">
+					{{ caller() }}
+				</div>
+				{% if hidefooter == "0" %}
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endmacro %}
