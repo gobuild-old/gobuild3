@@ -38,8 +38,9 @@ def recommend():
     reason = request.form.get('reason')
     category = request.form.get('category')
     rc = models.Recommend.get(repo=repo)
+    print rc
     if rc:
-        return flask.jsonify(dict(status=1, message='already recommend by %s' %(
+        return flask.jsonify(dict(status=1, message='Already recommend by %s' %(
             rc.author)))
     rc = models.Recommend(repo=repo, author=author, reason=reason)
     rc.name = repo.name
@@ -52,7 +53,7 @@ def recommend():
     rc.category = cg
 
     print author, reason
-    return flask.jsonify(dict(status=0, message='success'))
+    return flask.jsonify(dict(status=0, message='Thanks, Email will send to you after checked.'))
 
 @bp.route('/v1/repolist')
 @models.db_session

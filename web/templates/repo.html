@@ -57,13 +57,17 @@
 					{% call render_modal('Recommand '+repo.name, 'recommend', hidefooter="1") %}
 						<form id="form-recommend" action='/api/v1/recommend' method='post' role="form">
 							<input type="hidden" name="reponame" value="{{repo.name}}"/>
+							<div>
+								<p><span style="color:red">Make sure</span>
+								you have downloaded and tested</p>
+							</div>
 							<div class="form-group">
 								<label>Category
 									<small>If no category found, just type the name</small>
 								</label>
 								<div class="row">
 									<div class="col-md-6">
-										<select id="select-category" name="category" 
+										<select id="select-category" 
 											class="form-control" style="width:60%">
 											<option></option>
 											{% for c in categorys %}
@@ -97,8 +101,7 @@
 										$("#input-category").val(e.currentTarget.value);
 									});
 									$("#form-recommend").ajaxForm(function(e){
-										console.log(e);
-										alert("Thanks, Email will send to you, when checked");
+										alert(e.message);
 									});
 							});
 						</script>
