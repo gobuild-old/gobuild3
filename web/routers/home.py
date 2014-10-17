@@ -106,8 +106,13 @@ def repo(reponame):
     if build and build.osarchs:
         osarchs = json.loads(build.osarchs)
 
-    kwargs = dict(repo=repo, builds=builds,
-            active_tag=active_tag, build=build, osarchs=osarchs)
+    categorys = []
+    for cg in models.select(c for c in models.Category)[:]:
+        categorys.append(cg.name)
+    kwargs = dict(repo=repo, builds=builds, 
+            categorys=categorys,
+            active_tag=active_tag, 
+            build=build, osarchs=osarchs)
     return render_template('repo.html', **kwargs)
 
 #

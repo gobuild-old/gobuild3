@@ -10,11 +10,13 @@
 			<div class="row">
 				<div class="col-md-12">
 				<h3>
+					{% if not repo.recommend %}
 					{% call modal_button('recommend') %}
 						<button class="pull-right btn btn-default btn-xs btn-success">
-							Recomend to explore
+							Recommend to explore
 						</button>
 					{% endcall %}
+					{% endif %}
 					<a href="/{{repo.name}}">{{repo.name}}</a>
 					<small>Updated {{repo.updated|naturaltime}}</small>
 				</h3>
@@ -53,7 +55,29 @@
 					{% endcall %}
 
 					{% call render_modal('Recommand '+repo.name, 'recommend', hidefooter="1") %}
-						<form id="form-recommend" role="form">
+						<form id="form-recommend" action='/api/v1/recommend' method='post' role="form">
+							<input type="hidden" name="reponame" value="{{repo.name}}"/>
+							<div class="form-group">
+								<label>Category
+									<small>If no category found, just type the name</small>
+								</label>
+								<div class="row">
+									<div class="col-md-6">
+										<select id="select-category" name="category" 
+											class="form-control" style="width:60%">
+											<option></option>
+											{% for c in categorys %}
+												<option>{{c}}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-md-6">
+										<input id="input-category" type="text" 
+											name="category" class="form-control"
+											required placeholder="Category manual">
+									</div>
+								</div>
+							</div>
 							<div class="form-group">
 								<label>Email address</label>
 								<input class="form-control" name="email" type="text" 
@@ -69,7 +93,11 @@
 						<script src="/static/js/jquery.form.js"></script> 
 						<script>
 							$(function(){
-									$("#form-recommend").ajaxForm(function(){
+									$("#select-category").change(function(e){
+										$("#input-category").val(e.currentTarget.value);
+									});
+									$("#form-recommend").ajaxForm(function(e){
+										console.log(e);
 										alert("Thanks, Email will send to you, when checked");
 									});
 							});

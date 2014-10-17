@@ -3,6 +3,7 @@ import os
 import json
 import time
 import datetime
+import uuid
 
 import humanize
 import flask
@@ -17,9 +18,40 @@ bp = flask.Blueprint('api', __name__)
 def home():
     return flask.render_template('api.html')
 
-@bp.route('/v1/recommend')
+@bp.route('/v1/category.json')
+@models.db_session
+def list_category():
+    cs = []
+    for cg in models.select(c for c in models.Category)[:]:
+        cs.append(cg.name)
+    return json.dumps(cs)
+
+@bp.route('/v1/recommend', methods=['POST'])
 @models.db_session
 def recommend():
+    reponame = request.form.get('reponame')
+    repo = models.Repo.get(name=reponame)
+    if not repo:
+        return flask.jsonify(dict(status=2, message='repo %s not found'%reponame))
+
+    author = request.form.get('email')
+    reason = request.form.get('reason')
+    category = request.form.get('category')
+    rc = models.Recommend.get(repo=repo)
+    if rc:
+        return flask.jsonify(dict(status=1, message='already recommend by %s' %(
+            rc.author)))
+    rc = models.Recommend(repo=repo, author=author, reason=reason)
+    rc.name = repo.name
+    rc.created = datetime.datetime.today()
+    rc.updated = datetime.datetime.today()
+    rc.checked = False
+    rc.uuid = '%s-%s' %(uuid.uuid4(), uuid.uuid1())
+    cg = models.Category.get(name=category) or \
+            models.Category(name=category)
+    rc.category = cg
+
+    print author, reason
     return flask.jsonify(dict(status=0, message='success'))
 
 @bp.route('/v1/repolist')
