@@ -12,16 +12,18 @@
 				<h3>
 					{% call modal_button('recommend') %}
 						<button class="pull-right btn btn-default btn-xs btn-success">
-							Recomend this Project
+							Recomend to explore
 						</button>
 					{% endcall %}
-					<a style="padding-left:5px" href="https://{{repo.name}}"><img height=25px src="/static/images/github32px.png"></a>
 					<a href="/{{repo.name}}">{{repo.name}}</a>
 					<small>Updated {{repo.updated|naturaltime}}</small>
 				</h3>
 				<hr/>
 				<p>{{repo.description}} <a href="https://{{repo.name}}">source</a></p>
 				<div class="pull-left">
+					<a href="https://{{repo.name}}">
+						<img height=20px src="/static/images/github-badge.png">
+					</a>
 					<a href="https://gowalker.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-gowalker-blue.svg?style=flat"></a>
 					<a href="https://sourcegraph.org/{{repo.name}}"><img src="http://img.shields.io/badge/doc-sourcegraph-blue.svg?style=flat"></a>
 					<!--<a href="http://go-search.org/view?id={{repo.name|urlencode}}"><img src="http://go-search.org/badge?id={{repo.name|urlencode}}" alt="GoSearch"></a>-->
@@ -68,7 +70,7 @@
 						<script>
 							$(function(){
 									$("#form-recommend").ajaxForm(function(){
-										alert("Thanks, you can close windows now");
+										alert("Thanks, Email will send to you, when checked");
 									});
 							});
 						</script>
