@@ -13,12 +13,12 @@
 						<span class="glyphicon glyphicon-star"></span> {{r.repo.stars}}
 					</div>
 					<h4>
-						<a data-toggle="tooltip" data-placement="top"
-							title="ok"
-							href="/{{r.repo.name}}">{{r.repo.name}}</a>
+						<a href="/{{r.repo.name}}">{{r.repo.name}}</a>
 					</h4>
 					<p>{{r.repo.description}}</p>
-					<p><small>recommend by <i>{{r.author}}</i></small></p>
+					<p><small>recommend by
+							<i data-toggle="tooltip" data-placement="top" title="{{r.reason|e}}">{{r.author}}</i>
+					</small></p>
 				</li>
 				{% endfor %}
 			</ul>
