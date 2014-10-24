@@ -50,7 +50,7 @@ func findFiles(path string, depth int, skips []*regexp.Regexp) ([]string, error)
 
 func Action(c *cli.Context) {
 	var goos, goarch = c.String("os"), c.String("arch")
-	var depth = c.Int("depth")
+	//var depth = c.Int("depth")
 	var output = c.String("output")
 	var gom = c.String("gom")
 	var nobuild = c.Bool("nobuild")
@@ -169,6 +169,7 @@ func Action(c *cli.Context) {
 	}
 
 	log.Debug("archive files")
+	depth := pcfg.Filesets.Depth
 	for _, filename := range pcfg.Filesets.Includes {
 		fs, err := findFiles(filename, depth, skips)
 		if err != nil {

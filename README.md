@@ -31,6 +31,7 @@ filesets:
         - LICENSE
     excludes:
         - \.git
+	depth: 3
 settings:
         targetdir: ""
         build: |
@@ -57,6 +58,7 @@ Use `packer` to check if `.gobuild.yml` is right.
 * settings.build.outfiles --- the basename of $REPONAME. files will add `.exe` automatically when building for windows
 * filesets.includes --- ["README.md", "LICENSE", "conf", "static", "views"]
 * filesets.excludes --- ["\.git", ".*\\.go"]
+* filesets.depths --- 3  # 0 for current dir depth
 other settings default to empty.
 
 alias is not supported for `bash -c` -- I really don't know why.

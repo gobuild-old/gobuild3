@@ -13,6 +13,7 @@ type PackageConfig struct {
 	Filesets    struct {
 		Includes []string `yaml:"includes"`
 		Excludes []string `yaml:"excludes"`
+		Depth    int      `yaml:"depth"`
 	} `yaml:"filesets"`
 	Settings struct {
 		TargetDir string   `yaml:"targetdir"` // target dir
@@ -32,6 +33,7 @@ func init() {
 	pcfg.Author = ""
 	pcfg.Filesets.Includes = []string{"README.md", "LICENSE", "conf", "static", "views"}
 	pcfg.Filesets.Excludes = []string{"\\.git", ".*\\.go"}
+	pcfg.Filesets.Depth = 3
 	pcfg.Settings.TargetDir = ""
 	pcfg.Settings.Build = DEFAULT_BUILD
 	DefaultPcfg = pcfg

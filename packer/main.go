@@ -23,7 +23,7 @@ func init() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "os", EnvVar: "GOOS", Value: runtime.GOOS, Usage: "operation system"},
 		cli.StringFlag{Name: "arch", EnvVar: "GOARCH", Value: runtime.GOARCH, Usage: "arch eg amd64|386|arm"},
-		cli.StringFlag{Name: "depth", Value: "3", Usage: "depth of file to walk"},
+		//cli.StringFlag{Name: "depth", Value: "3", Usage: "depth of file to walk"},
 		cli.StringFlag{Name: "output,o", Value: program + ".zip", Usage: "target file"},
 		cli.StringFlag{Name: "gom", Value: "go", Usage: "go package manage program"},
 		cli.BoolFlag{Name: "nobuild", Usage: "donot call go build when pack"},
