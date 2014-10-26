@@ -5,6 +5,9 @@ RUN apt-get update
 RUN apt-get install -y python-pip
 RUN apt-get install -y bzr
 
+# necessary packages
+RUN apt-get install -y libreadline6
+
 ADD requirements.txt /
 RUN pip install -r requirements.txt
 
