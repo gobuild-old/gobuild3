@@ -105,7 +105,7 @@ def docker_build(job_id, reponame, tag):
 
     ret = sh.docker('run', '--rm',
             '-v', workspace+':/output',
-            '-e', 'TIMEOUT=10m',
+            '-e', 'TIMEOUT=30m',
             '-e', 'HTTP_PROXY=%s'%gcfg.slave.http_proxy,
             DOCKER_IMAGE,
             '--repo', reponame,
