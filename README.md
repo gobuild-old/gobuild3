@@ -1,4 +1,4 @@
-## Beta version released
+## Project stoped for now. Beta version released
 
 <http://gobuild.io>
 
