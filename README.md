@@ -1,4 +1,4 @@
-## Project stoped for now. Beta version released
+## Project reopen on 2015-12-13. Beta version released
 
 <http://gobuild.io>
 
